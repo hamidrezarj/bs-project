@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Ticket;
+use App\Models\TicketAnswer;
 
 class BaseController extends Controller
 {
@@ -12,9 +15,15 @@ class BaseController extends Controller
         return view('index', ['name' => 'Hamidreza']);
     }
 
-    public function getTime(Request $request)
+    public function temp(Request $request)
     {
-        $now = Carbon::now();
-        echo($now);
+        $ticket_answer = TicketAnswer::find(1);
+        $ticket = Ticket::find(1);
+        $ticket->ticket_answers()->save($ticket_answer);
+        $ticket->status = 'answered';
+        $ticket->save();
+        // $ticket_answer->save();
+
+        return $ticket_answer;
     }
 }
