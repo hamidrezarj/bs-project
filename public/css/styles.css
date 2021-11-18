@@ -1,0 +1,18 @@
+@font-face {
+    src: url("/fonts/IRANSansWeb.woff");
+    font-family: "my-font";
+}
+
+body {
+    font-family: "my-font";
+}
+
+input[type="text"]:-moz-placeholder {
+    text-align: right;
+}
+input[type="text"]:-ms-input-placeholder {
+    text-align: right;
+}
+input[type="text"]::-webkit-input-placeholder {
+    text-align: right;
+}
