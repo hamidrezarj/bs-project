@@ -21,8 +21,13 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'email',
+        'national_code',
+        'student_id',
+        'phone_number',
+        'field',
+        'user_type',
+        'faculty',
         'password',
-        'national_code'
     ];
 
     /**
@@ -52,5 +57,10 @@ class User extends Authenticatable
     public function ticket_answers()
     {
         return $this->hasMany(TicketAnswer::class);
+    }
+
+    public function setPasswordAttribute($password)
+    {
+        $this->attributes['password'] = bcrypt($password);
     }
 }

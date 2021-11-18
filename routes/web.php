@@ -21,7 +21,12 @@ Route::get('/', function () {
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-// Route::get('/index', [BaseController::class, 'index']);
-Route::get('temp', [BaseController::class, 'temp']);
+Route::get('index', [BaseController::class, 'index'])->name('index');
+
+Route::middleware('auth')->group(function(){
+    Route::get('temp', [BaseController::class, 'temp']);
+});
 
 
+
+// user-specific routes
