@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,12 +22,17 @@ Route::get('/', function () {
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('index', [BaseController::class, 'index'])->name('index');
+// Route::get('index', [BaseController::class, 'index'])->name('index');
 
 Route::middleware('auth')->group(function(){
-    Route::get('temp', [BaseController::class, 'temp']);
 });
 
-
-
 // user-specific routes
+Route::middleware('auth')->group(function(){
+    Route::get('user', [App\Http\Controllers\UserController::class, 'index'])->name('index');
+    Route::get('user/ticket', [App\Http\Controllers\UserController::class, 'showTicketForm'])->name('ticket_form');
+    
+    Route::post('user/create/ticket', [App\Http\Controllers\UserController::class, 'creatTicket'])->name('create_ticket');
+});
+
+Route::get('temp', [UserController::class, 'temp']);

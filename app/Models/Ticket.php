@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Morilog\Jalali\Jalalian;
+use Carbon\Carbon;
 
 class Ticket extends Model
 {
@@ -26,5 +28,10 @@ class Ticket extends Model
     public function ticket_answers()
     {
         return $this->hasOne(TicketAnswer::class);
+    }
+
+    public function getCreatedAtFaAttribute()
+    {
+        return Jalalian::fromCarbon(new Carbon($this->created_at));
     }
 }

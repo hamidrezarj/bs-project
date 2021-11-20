@@ -18,22 +18,6 @@ class BaseController extends Controller
         return view('index', ['name' => 'Hamidreza']);
     }
 
-    public function temp(Request $request)
-    {
-        // $ticket_answer = TicketAnswer::find(1);
-        // $ticket = Ticket::find(1);
-        // $ticket->ticket_answers()->save($ticket_answer);
-        // $ticket->status = 'answered';
-        // $ticket->save();
-        // // $ticket_answer->save();
-
-        if (Auth::check()) {
-            return Auth::user();
-        }
-
-        return 'dsf';
-    }
-
     public function showRegisterForm()
     {
         return view('register');

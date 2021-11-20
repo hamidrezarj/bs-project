@@ -20,6 +20,7 @@ class CreateTicketsTable extends Migration
             $table->text('description');
             $table->enum('status', ['open', 'answered', 'failed']);
             $table->foreignId('user_id')->nullable()->references('id')->on('users')->onDelete('cascade');
+            $table->timestamp('created_at_fa')->nullable();;
             $table->timestamps();
         });
     }

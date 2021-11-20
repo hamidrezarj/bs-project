@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Morilog\Jalali\Jalalian;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -62,5 +64,10 @@ class User extends Authenticatable
     public function setPasswordAttribute($password)
     {
         $this->attributes['password'] = bcrypt($password);
+    }
+
+    public function getCreatedAtFaAttribute()
+    {
+        return Jalalian::fromCarbon(new Carbon($this->created_at));
     }
 }

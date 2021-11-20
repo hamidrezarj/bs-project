@@ -19,6 +19,7 @@ class CreateTicketAnswersTable extends Migration
             $table->integer('user_vote')->nullable();
             $table->foreignId('user_id')->references('id')->on('users');
             $table->foreignId('ticket_id')->nullable()->references('id')->on('tickets');
+            $table->timestamp('created_at_fa')->nullable();
             $table->timestamps();
         });
     }
