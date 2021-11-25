@@ -58,7 +58,7 @@ class User extends Authenticatable
 
     public function ticket_answers()
     {
-        return $this->hasMany(TicketAnswer::class);
+        return $this->hasMany(TicketAnswer::class, 'technical_id');
     }
 
     public function setPasswordAttribute($password)

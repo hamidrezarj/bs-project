@@ -99,7 +99,7 @@
                             <label for="field" class="col-md-4 col-form-label text-md-right">رشته</label>
 
                             <div class="col-md-6">
-                                <input id="field" type="text" class="form-control @error('field') is-invalid @enderror" name="field" value="{{ old('field') }}" required autocomplete="field">
+                                <input id="field" type="text" class="form-control @error('field') is-invalid @enderror" name="field" value="{{ old('field') }}" autocomplete="field">
 
                                 @error('field')
                                     <span class="invalid-feedback" role="alert">
@@ -113,7 +113,7 @@
                             <label for="faculty" class="col-md-4 col-form-label text-md-right">دانشکده</label>
 
                             <div class="col-md-6">
-                                <input id="faculty" type="text" class="form-control @error('faculty') is-invalid @enderror" name="faculty" value="{{ old('faculty') }}" required autocomplete="faculty">
+                                <input id="faculty" type="text" class="form-control @error('faculty') is-invalid @enderror" name="faculty" value="{{ old('faculty') }}" autocomplete="faculty">
 
                                 @error('faculty')
                                     <span class="invalid-feedback" role="alert">

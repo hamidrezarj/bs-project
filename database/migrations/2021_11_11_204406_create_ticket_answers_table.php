@@ -15,11 +15,11 @@ class CreateTicketAnswersTable extends Migration
     {
         Schema::create('ticket_answers', function (Blueprint $table) {
             $table->id();
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->integer('user_vote')->nullable();
-            $table->foreignId('user_id')->references('id')->on('users');
+            $table->foreignId('technical_id')->nullable()->references('id')->on('users');
             $table->foreignId('ticket_id')->nullable()->references('id')->on('tickets');
-            $table->timestamp('created_at_fa')->nullable();
+            $table->timestamp('reply_date')->nullable();
             $table->timestamps();
         });
     }

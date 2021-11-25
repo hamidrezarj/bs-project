@@ -25,7 +25,7 @@ class Ticket extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function ticket_answers()
+    public function ticket_answer()
     {
         return $this->hasOne(TicketAnswer::class);
     }

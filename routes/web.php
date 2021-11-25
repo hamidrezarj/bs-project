@@ -31,8 +31,9 @@ Route::middleware('auth')->group(function(){
 Route::middleware('auth')->group(function(){
     Route::get('user', [App\Http\Controllers\UserController::class, 'index'])->name('index');
     Route::get('user/ticket', [App\Http\Controllers\UserController::class, 'showTicketForm'])->name('ticket_form');
-    
     Route::post('user/create/ticket', [App\Http\Controllers\UserController::class, 'creatTicket'])->name('create_ticket');
+    
+    Route::get('user/ticket/{ticket}', [UserController::class, 'showTicketDetails'])->name('ticket_details')->middleware('ticket');
 });
 
 Route::get('temp', [UserController::class, 'temp']);

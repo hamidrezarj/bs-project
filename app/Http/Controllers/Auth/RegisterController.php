@@ -56,9 +56,7 @@ class RegisterController extends Controller
             'national_code' => ['required', 'digits:10', 'unique:users'],
             'student_id'    => ['nullable', 'digits_between:7,8', 'unique:users'],
             'phone_number'  => ['required', 'unique:users', 'regex:/^(0){1}9\d{9}$/'],
-            'field'         => ['required', 'string'],
             'user_type'     => ['required'],
-            'faculty'       => ['required', 'string'],
             'password'      => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
