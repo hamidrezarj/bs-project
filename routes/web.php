@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\UserController;
-
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,18 +22,19 @@ Route::get('/', function () {
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-// Route::get('index', [BaseController::class, 'index'])->name('index');
-
 Route::middleware('auth')->group(function(){
-});
-
-// user-specific routes
-Route::middleware('auth')->group(function(){
-    Route::get('user', [App\Http\Controllers\UserController::class, 'index'])->name('index');
-    Route::get('user/ticket', [App\Http\Controllers\UserController::class, 'showTicketForm'])->name('ticket_form');
-    Route::post('user/create/ticket', [App\Http\Controllers\UserController::class, 'creatTicket'])->name('create_ticket');
-    
-    Route::get('user/ticket/{ticket}', [UserController::class, 'showTicketDetails'])->name('ticket_details')->middleware('ticket');
 });
 
 Route::get('temp', [UserController::class, 'temp']);
+
+Route::get('info', function(){
+    return Auth::user();
+});
+
+Route::get('csrf', function(){
+    return csrf_token();
+});
+
+Route::get('login-dev', function(){
+    Auth::loginUsingId(4);
+});

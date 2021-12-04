@@ -6,30 +6,22 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 use Laravel\Sanctum\HasApiTokens;
 use Morilog\Jalali\Jalalian;
 use Carbon\Carbon;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasRoles, HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var string[]
      */
-    protected $fillable = [
-        'first_name',
-        'last_name',
-        'email',
-        'national_code',
-        'student_id',
-        'phone_number',
-        'field',
-        'user_type',
-        'faculty',
-        'password',
+    protected $guarded = [
+        'id'
     ];
 
     /**

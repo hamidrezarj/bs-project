@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
-use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class RegisterController extends Controller
 {
@@ -29,7 +30,27 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/user';
+    public function redirectTo() {
+        $role = Auth::user()->roles()->first();
+        $redirect = '';
+
+        switch($role->name)
+        {
+            case 'user':
+                $redirect = '/user';
+                break;
+            case 'technical_support':
+                $redirect = '/support';
+                break;
+            case 'admin':
+                $redirect = '/admin';
+                break;
+            default:
+                $redirect = '/';
+        }
+
+        return $redirect;
+    }
 
     /**
      * Create a new controller instance.
@@ -69,6 +90,13 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create($data);
+        $user = User::create($data);
+
+        if ($data['user_type'] == 'student' || $data['user_type'] == 'professor'  || $data['user_type'] == 'expert')
+            $user->assignRole('user');
+        elseif ($data['user_type'] == 'technical_support')
+            $user->assignRole('technical_support');
+
+        return $user;
     }
 }

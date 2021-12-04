@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\TicketAnswer;
 use Morilog\Jalali\Jalalian;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -45,7 +46,7 @@ class UserController extends Controller
         $ticket_answer = $technical_support->ticket_answers()->create();
         $ticket->ticket_answer()->save($ticket_answer);
         
-        return redirect()->route('index');
+        return redirect()->route('user_index');
     }
 
     public function showTicketDetails(Request $request, Ticket $ticket)
@@ -55,6 +56,6 @@ class UserController extends Controller
 
     public function temp()
     {
-        return random_ts_id();
+        return Auth::user()->roles()->first();
     }
 }

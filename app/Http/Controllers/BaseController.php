@@ -13,11 +13,6 @@ use Carbon\Carbon;
 
 class BaseController extends Controller
 {
-    public function index(Request $request)
-    {
-        return view('index', ['name' => 'Hamidreza']);
-    }
-
     public function showRegisterForm()
     {
         return view('register');

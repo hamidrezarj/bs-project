@@ -10,7 +10,6 @@
                 <th scope="col">شماره تیکت</th>
                 <th scope="col">شرح درخواست</th>
                 <th scope="col">وضعیت</th>
-                <th scope="col">تاریخ ثبت</th>
                 <th scope="col">عملیات</th>
             </tr>
         </thead>
@@ -21,8 +20,7 @@
                 <td>{{ $ticket->id }}</td>
                 <td>{{ $ticket->description }}</td>
                 <td>{{ $ticket->status }}</td>
-                <td>{{ $ticket->created_at_fa }}</td>
-                <td><a href="{{ route('ticket_details', ['ticket' => $ticket->id]) }}" class="link-primary">مشاهده</a></td>
+                <td><a href="{{ route('ticket_details', ['ticket' => $ticket->id]) }}" class="link-primary">ارسال پاسخ</a></td>
             </tr>
             @endforeach
         </tbody>
@@ -30,10 +28,6 @@
 
     <div class="d-flex justify-content-center">
         {{ $tickets->links() }}
-    </div>
-
-    <div class="d-grid gap-2 col-6 mx-auto">
-        <a href="{{ route('ticket_form') }}" class="btn btn-primary" tabindex="-1" aria-disabled="true">ایجاد تیکت جدید</a>
     </div>
 
 </div>
