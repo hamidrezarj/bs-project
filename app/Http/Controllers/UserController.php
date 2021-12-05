@@ -7,10 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Ticket;
 use App\Models\User;
-use App\Models\TicketAnswer;
-use Morilog\Jalali\Jalalian;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Hash;
+
 
 class UserController extends Controller
 {

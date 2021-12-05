@@ -43,6 +43,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = ['full_name'];
+
     public function tickets()
     {
         return $this->hasMany(Ticket::class);
@@ -61,5 +63,10 @@ class User extends Authenticatable
     public function getCreatedAtFaAttribute()
     {
         return Jalalian::fromCarbon(new Carbon($this->created_at));
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->first_name. " ". $this->last_name;
     }
 }

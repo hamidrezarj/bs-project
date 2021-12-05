@@ -15,5 +15,7 @@ use App\Http\Controllers\TechnicalSupportController;
 */
 
 Route::group(['middleware' => ['role:technical_support']], function () {
-    Route::get('', [App\Http\Controllers\TechnicalSupportController::class, 'index']);
+    Route::get('', [TechnicalSupportController::class, 'index']);
+    Route::get('ticket/{ticket}', [TechnicalSupportController::class, 'ticketDetails'])->name('support.ticket_details');
+    Route::post('reply/ticket/{ticket}', [TechnicalSupportController::class, 'replyTicket'])->name('support.reply_ticket');
 });
