@@ -16,6 +16,22 @@ class UserController extends Controller
         $tickets = Auth()->user()->tickets()->orderBy('created_at', 'desc')->paginate(5)->withQueryString();
         return view('user.index', [
             'tickets' => $tickets,
+            'user' => Auth::user(),
+        ]);
+    }
+
+    public function show()
+    {
+        if (Auth::user()->cannot('show_profile')) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'access to the requested resource is forbidden'
+            ], 403);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'data' => Auth::user()
         ]);
     }
 
@@ -38,15 +54,16 @@ class UserController extends Controller
 
         $ticket = auth()->user()->tickets()->create($request->all());
         $ticket->status = 'open';
+        $ticket->expire_date = Carbon::now()->addMinutes(5);
         $ticket->save();
 
         // assign ticket to a technical support.
-        $ts_id = random_ts_id();
+        $ts_id = getRandomSupport();
         $technical_support = User::find($ts_id);
         $ticket_answer = $technical_support->ticket_answers()->create();
         $ticket->ticket_answer()->save($ticket_answer);
         
-        return redirect()->route('user_index');
+        return redirect()->route('user.index');
     }
 
     public function showTicketDetails(Request $request, Ticket $ticket)

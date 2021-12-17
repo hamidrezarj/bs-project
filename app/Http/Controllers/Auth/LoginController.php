@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class LoginController extends Controller
 {
@@ -28,12 +30,12 @@ class LoginController extends Controller
      *
      * @var string
      */
-    public function redirectTo() {
+    public function redirectTo()
+    {
         $role = Auth::user()->roles()->first();
         $redirect = '';
 
-        switch($role->name)
-        {
+        switch ($role->name) {
             case 'user':
                 $redirect = '/user';
                 break;
@@ -60,6 +62,11 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    public function showLoginForm()
+    {
+        return view('auth.login-selfdesign');
+    }
+
     public function username()
     {
         return 'national_code';
@@ -73,5 +80,34 @@ class LoginController extends Controller
         ], [], [
             'national_code' => 'کد ملی'
         ]);
+    }
+
+    protected function authenticated(Request $request, $user)
+    {
+        $minutes = env('SESSION_LIFETIME', 480);
+        $expire_at = Carbon::now()->add('minutes', $minutes);
+        Cache::add('user-is-online-'. $user->id, true, $expire_at);
+    }
+
+    public function logout(Request $request)
+    {
+        $user = $request->user();
+        
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        if ($response = $this->loggedOut($request)) {
+            return $response;
+        }
+
+        // clear cache
+        Cache::forget('user-is-online-'. $user->id);
+
+        return $request->wantsJson()
+            ? new JsonResponse([], 204)
+            : redirect('/');
     }
 }

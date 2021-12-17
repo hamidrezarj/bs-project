@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,13 +14,19 @@ use App\Http\Controllers\UserController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::middleware(['role:user'])->group(function(){
-    Route::get('', [UserController::class, 'index'])->name('user_index');
+Route::middleware(['role:user'])->group(function () {
+    Route::get('', [UserController::class, 'index'])->name('user.index')->middleware('expire_ticket:'. Ticket::class);
+    Route::get('show', [UserController::class, 'show'])->name('user.show');
+
 
     Route::get('ticket', [UserController::class, 'showTicketForm'])->name('ticket_form');
     Route::get('ticket/{ticket}', [UserController::class, 'showTicketDetails'])->name('ticket.details')
-                                                                               ->middleware('is_owner:'. \App\Models\Ticket::class);
+                                                                               ->middleware(['is_owner:'. Ticket::class,
+                                                                                             'expire_ticket:'. Ticket::class]);
     Route::post('ticket/create', [UserController::class, 'creatTicket'])->name('create_ticket');
     Route::post('ticket/vote/{ticket}', [UserController::class, 'vote'])->name('ticket.vote');
 });
 
+Route::get('temp', function () {
+    dd(getRandomSupport());
+});

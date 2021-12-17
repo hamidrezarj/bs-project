@@ -1,17 +1,32 @@
 <?php
 
-use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Arr;
+use App\Models\User;
 
-if (!function_exists('random_ts_id')) {
-    function random_ts_id()
+if (!function_exists('getRandomSupport')) {
+    function getRandomSupport()
     {
-        $technical_ids = User::select('id')->where('user_type', 'technical_support')->get();
+        $supports = getActiveSupports();
+        $rand_idx = mt_rand(0, count($supports) - 1);
+        return $supports[$rand_idx];
+    }
+}
 
-        foreach ($technical_ids as $ts) {
-            $ids[] = $ts->id;
+if (!function_exists('getActiveSupports')) {
+    function getActiveSupports()
+    {
+        $supports = User::where('user_type', 'technical_support')->get();
+        $result = [];
+
+        foreach ($supports as $support) {
+
+            if(Cache::has('user-is-online-'. $support->id))
+            {
+                $result[] = $support->id;
+            }
         }
 
-        return Arr::random($ids);
+        return $result;
     }
 }

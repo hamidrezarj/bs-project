@@ -4,7 +4,7 @@
 
 <div class="container mt-3">
 
-    <h3>{{ $support->full_name }}</h3>
+    <h3>{{ $user->full_name }}</h3>
 
     <table class="table">
         <thead class="table-light">

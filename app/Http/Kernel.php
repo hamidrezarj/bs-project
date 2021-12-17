@@ -66,7 +66,8 @@ class Kernel extends HttpKernel
         'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
-        'ticket' => \App\Http\Middleware\TicketMiddleware::class,
-        'is_owner' => \App\Http\Middleware\EnsureUserIsOwner::class
+        // 'ticket' => \App\Http\Middleware\TicketMiddleware::class,
+        'is_owner' => \App\Http\Middleware\EnsureUserIsOwner::class,
+        'expire_ticket' => \App\Http\Middleware\ExpireTicket::class,
     ];
 }

@@ -4,8 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use App\Models\Ticket;
 use App\Models\TicketAnswer;
+use App\Models\Ticket;
 
 class EnsureUserIsOwner
 {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Ticket;
@@ -49,5 +50,14 @@ class TechnicalSupportController extends Controller
 
         return redirect()->route('support.index');
         
+    }
+
+    public function activate()
+    {
+        $minutes = env('SESSION_LIFETIME', 480);
+        $expire_at = Carbon::now()->add('minutes', $minutes);
+        Cache::add('user-is-online-'. Auth::user()->id, true, $expire_at);
+
+        return redirect()->route('support.index');
     }
 }

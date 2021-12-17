@@ -2,35 +2,52 @@
 
 @section('content')
 
-<div class="container mt-3">
+    <div class="container mt-3">
 
-    <h3>{{ $support->full_name }}</h3>
+        <h3>{{ $support->full_name }}</h3>
 
-    <table class="table">
-        <thead class="table-light">
-            <tr>
-                <th scope="col">شماره تیکت</th>
-                <th scope="col">شرح درخواست</th>
-                <th scope="col">وضعیت</th>
-                <th scope="col">عملیات</th>
-            </tr>
-        </thead>
-        <tbody>
+        @if (Cache::has('user-is-online-' . $support->id))
+            <span class="text-success">فعال</span>
+        @else
+            <span class="text-secondary">غیرفعال</span>
 
-            @foreach($tickets as $ticket)
-            <tr>
-                <td>{{ $ticket->id }}</td>
-                <td>{{ $ticket->description }}</td>
-                <td>{{ $ticket->status }}</td>
-                <td><a href="{{ route('support.ticket_details', ['ticket' => $ticket->id]) }}" class="link-primary">ارسال پاسخ</a></td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+            <a href="{{ route('support.activate') }}" onclick="event.preventDefault();
+                document.getElementById('activate-form').submit();">
+                فعال سازی
+            </a>
 
-    <div class="d-flex justify-content-center">
-        {{ $tickets->links() }}
+            <form id="activate-form" action="{{ route('support.activate') }}" method="POST" class="d-none">
+                @csrf
+            </form>
+
+        @endif
+
+        <table class="table">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">شماره تیکت</th>
+                    <th scope="col">شرح درخواست</th>
+                    <th scope="col">وضعیت</th>
+                    <th scope="col">عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach ($tickets as $ticket)
+                    <tr>
+                        <td>{{ $ticket->id }}</td>
+                        <td>{{ $ticket->description }}</td>
+                        <td>{{ $ticket->status }}</td>
+                        <td><a href="{{ route('support.ticket_details', ['ticket' => $ticket->id]) }}"
+                                class="link-primary">ارسال پاسخ</a></td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        <div class="d-flex justify-content-center">
+            {{ $tickets->links() }}
+        </div>
+
     </div>
-
-</div>
 @endsection

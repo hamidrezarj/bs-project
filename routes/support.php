@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TechnicalSupportController;
-
+use App\Models\TicketAnswer;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,10 +15,12 @@ use App\Http\Controllers\TechnicalSupportController;
 |
 */
 
-Route::group(['middleware' => ['role:technical_support']], function () {
+Route::group(['middleware' => ['role:technical_support', 'expire_ticket:'. TicketAnswer::class]], function () {
     Route::get('', [TechnicalSupportController::class, 'index'])->name('support.index');
     Route::get('ticket/{ticket}', [TechnicalSupportController::class, 'ticketDetails'])->name('support.ticket_details')
-                                                                                       ->middleware('is_owner:'. App\Models\TicketAnswer::class);
+                                                                                       ->middleware('is_owner:'. TicketAnswer::class);
     Route::post('reply/ticket/{ticket}', [TechnicalSupportController::class, 'replyTicket'])->name('support.reply_ticket')
-                                                                                            ->middleware('is_owner:'. App\Models\TicketAnswer::class);
+                                                                                            ->middleware('is_owner:'. TicketAnswer::class);
 });
+
+Route::post('activate', [TechnicalSupportController::class, 'activate'])->name('support.activate');
