@@ -70,6 +70,8 @@ class LoginController extends Controller
         $request->validate([
             $this->username() => 'required|digits:10',
             'password' => 'required|string',
+        ], [], [
+            'national_code' => 'کد ملی'
         ]);
     }
 }

@@ -7,17 +7,17 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Ticket;
+use Carbon\Carbon;
 
 class TechnicalSupportController extends Controller
 {
     public function index()
     {
         $support = Auth::user();
-        $assigned_tickets = DB::table('users')
-                              ->join('ticket_answers', 'users.id', '=', 'ticket_answers.technical_id')
-                              ->join('tickets', 'ticket_answers.ticket_id', '=', 'tickets.id')
+        $assigned_tickets = DB::table('tickets')
+                              ->join('ticket_answers', 'tickets.id', '=', 'ticket_answers.ticket_id')
                               ->select('tickets.*')
-                              ->where('users.id', $support->id)->where('status', 'open')
+                              ->where('ticket_answers.technical_id', $support->id)->where('status', 'open')
                               ->paginate(5);
 
         return view('support.index', [
@@ -37,9 +37,17 @@ class TechnicalSupportController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'description' => 'required|string',
-
         ])->validate();
         
-        dd($request);
+        $ticket_answer = $ticket->ticket_answer;
+        $ticket_answer->description = $request->description;
+        $ticket_answer->reply_date = Carbon::now()->toDateTimeString();
+        $ticket_answer->save();
+
+        $ticket->status = 'answered';
+        $ticket->save();
+
+        return redirect()->route('support.index');
+        
     }
 }

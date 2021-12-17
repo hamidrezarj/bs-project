@@ -79,6 +79,11 @@ class RegisterController extends Controller
             'phone_number'  => ['required', 'unique:users', 'regex:/^(0){1}9\d{9}$/'],
             'user_type'     => ['required'],
             'password'      => ['required', 'string', 'min:8', 'confirmed'],
+        ], [], [
+            'national_code' => 'کد ملی',
+            'student_id' => 'شماره دانشجویی',
+            'phone_number' => 'شماره تلفن',
+            'user_type' => 'نوع کاربر'
         ]);
     }
 

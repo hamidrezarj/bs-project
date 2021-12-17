@@ -13,10 +13,13 @@ use App\Http\Controllers\UserController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::group(['middleware' => ['role:user']], function(){
-    Route::get('', [App\Http\Controllers\UserController::class, 'index'])->name('user_index');
-    Route::get('ticket', [App\Http\Controllers\UserController::class, 'showTicketForm'])->name('ticket_form');
-    Route::get('ticket/{ticket}', [UserController::class, 'showTicketDetails'])->name('ticket_details')->middleware('ticket');
-    Route::post('create/ticket', [App\Http\Controllers\UserController::class, 'creatTicket'])->name('create_ticket');
+Route::middleware(['role:user'])->group(function(){
+    Route::get('', [UserController::class, 'index'])->name('user_index');
+
+    Route::get('ticket', [UserController::class, 'showTicketForm'])->name('ticket_form');
+    Route::get('ticket/{ticket}', [UserController::class, 'showTicketDetails'])->name('ticket.details')
+                                                                               ->middleware('is_owner:'. \App\Models\Ticket::class);
+    Route::post('ticket/create', [UserController::class, 'creatTicket'])->name('create_ticket');
+    Route::post('ticket/vote/{ticket}', [UserController::class, 'vote'])->name('ticket.vote');
 });
 

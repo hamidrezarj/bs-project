@@ -20,6 +20,7 @@ class CreateTicketAnswersTable extends Migration
             $table->foreignId('technical_id')->nullable()->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('ticket_id')->nullable()->references('id')->on('tickets')->onDelete('cascade');
             $table->timestamp('reply_date')->nullable();
+            $table->timestamp('vote_date')->nullable();
             $table->timestamps();
         });
     }

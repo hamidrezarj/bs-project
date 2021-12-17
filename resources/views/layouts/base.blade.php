@@ -5,17 +5,23 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.rtl.min.css" integrity="sha384-gXt9imSW0VcJVHezoNQsP+TNrjYXoGcrqBZJpry9zJt8PCQjobwmhMGaDHTASo9N" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{asset('css/styles.css')}}">
-
-    <title>Document</title>
+    <link rel="stylesheet" href="{{asset('css/lib/fontiran.css')}}">
+    <link rel="stylesheet" href="{{asset('css/lib/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/lib/bootstrap.rtl.min.css')}}">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="{{asset('css/lib/mainstyles.css')}}">
+    @yield('css')
+    <title>@yield('title')</title>
 </head>
 
 <body>
-    @yield('content')
-
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    <div class="container self-style">
+        @yield('content')
+    </div>
+    <script src="{{asset('js/lib/jquery-3.6.0.min.js')}}"></script>
+    <script src="{{asset('js/lib/bootstrap.min.js')}}"></script>
+    <script src="{{asset('js/lib/popper.min.js')}}"></script>
+    <script src="{{asset('js/lib/bootstrap.bundle.min.js')}}"></script>
+    @yield('script')
 </body>
 </html>

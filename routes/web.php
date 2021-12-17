@@ -23,7 +23,10 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::middleware('auth')->group(function(){
+    Route::get('show', [BaseController::class, 'show'])->name('user.show');
 });
+
+Route::get('reload-captcha', [UserController::class, 'reloadCaptcha']);
 
 Route::get('temp', [UserController::class, 'temp']);
 
@@ -36,5 +39,8 @@ Route::get('csrf', function(){
 });
 
 Route::get('login-dev', function(){
-    Auth::loginUsingId(4);
+    Auth::loginUsingId(2);
 });
+
+Route::get('login-self', [BaseController::class, 'login']);
+Route::get('register-self', [BaseController::class, 'register']);

@@ -20,7 +20,7 @@ class TicketMiddleware
         $ticket = Ticket::find($id);
 
         if($ticket->user->id != $request->user()->id)   
-            abort(403, 'Forbidden');
+            abort(403);
         return $next($request);
     }
 }
