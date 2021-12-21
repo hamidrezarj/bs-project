@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TechnicalSupportController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,5 +15,6 @@ use App\Http\Controllers\TechnicalSupportController;
 */
 
 Route::group(['middleware' => ['role:admin']], function () {
-    Route::get('', [App\Http\Controllers\TechnicalSupportController::class, 'index']);
+    Route::get('', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.index');
+    Route::get('report/support/{support}', [App\Http\Controllers\AdminController::class, 'getReport'])->name('admin.report');
 });

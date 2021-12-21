@@ -21,6 +21,7 @@ Route::group(['middleware' => ['role:technical_support', 'expire_ticket:'. Ticke
                                                                                        ->middleware('is_owner:'. TicketAnswer::class);
     Route::post('reply/ticket/{ticket}', [TechnicalSupportController::class, 'replyTicket'])->name('support.reply_ticket')
                                                                                             ->middleware('is_owner:'. TicketAnswer::class);
-});
 
-Route::post('activate', [TechnicalSupportController::class, 'activate'])->name('support.activate');
+    Route::post('activate', [TechnicalSupportController::class, 'activate'])->name('support.activate');
+    Route::post('deactivate', [TechnicalSupportController::class, 'deactivate'])->name('support.deactivate');
+});

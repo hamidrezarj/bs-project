@@ -87,6 +87,11 @@ class LoginController extends Controller
         $minutes = env('SESSION_LIFETIME', 480);
         $expire_at = Carbon::now()->add('minutes', $minutes);
         Cache::add('user-is-online-'. $user->id, true, $expire_at);
+
+        if($user->roles()->first()->name == 'technical_support')
+        {
+            assignPendingTicketsToSupport($user);
+        }
     }
 
     public function logout(Request $request)

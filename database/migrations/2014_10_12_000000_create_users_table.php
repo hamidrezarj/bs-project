@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('phone_number')->nullable();
             $table->string('field')->nullable();
             $table->string('faculty')->nullable();
-            $table->enum('user_type', ['student', 'professor', 'expert', 'technical_support']);
+            $table->enum('user_type', ['student', 'professor', 'expert', 'technical_support', 'admin'])->nullable();
             
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

@@ -63,5 +63,16 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $u4->assignRole('technical_support');
+
+        $admin = App\Models\User::create([
+            'first_name' => 'اسلام',
+            'last_name' => 'ناظمی',
+            'email' => 'nazemi@gmail.com',
+            'national_code' => '5632148541',
+            'user_type' => 'admin',
+            'password' => '12345678'
+        ]);
+    
+        $admin->assignRole('admin');
     }
 }

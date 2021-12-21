@@ -49,7 +49,6 @@ class TechnicalSupportController extends Controller
         $ticket->save();
 
         return redirect()->route('support.index');
-        
     }
 
     public function activate()
@@ -58,6 +57,14 @@ class TechnicalSupportController extends Controller
         $expire_at = Carbon::now()->add('minutes', $minutes);
         Cache::add('user-is-online-'. Auth::user()->id, true, $expire_at);
 
+        assignPendingTicketsToSupport(Auth::user());
+
+        return redirect()->route('support.index');
+    }
+
+    public function deactivate()
+    {
+        Cache::forget('user-is-online-'. Auth::user()->id);
         return redirect()->route('support.index');
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use App\Models\TicketAnswer;
 use App\Models\Ticket;
 use App\Models\User;
 use Carbon\Carbon;
@@ -48,7 +49,7 @@ class UserController extends Controller
             'description' => 'required',
 
         ], [], [
-            'course_name' => 'نام درس', 
+            'course_name' => 'نام درس',
             'course_id' => 'کد درس'
         ])->validate();
 
@@ -59,10 +60,19 @@ class UserController extends Controller
 
         // assign ticket to a technical support.
         $ts_id = getRandomSupport();
-        $technical_support = User::find($ts_id);
-        $ticket_answer = $technical_support->ticket_answers()->create();
-        $ticket->ticket_answer()->save($ticket_answer);
         
+        // no active supports exist.
+        if ($ts_id == 0) {
+            $ticket_answer = TicketAnswer::create([
+                'ticket_id' => $ticket->id,
+                'technical_id' => $ts_id,
+            ]);
+        } else {
+            $technical_support = User::find($ts_id);
+            $ticket_answer = $technical_support->ticket_answers()->create();
+        }
+
+        $ticket->ticket_answer()->save($ticket_answer);
         return redirect()->route('user.index');
     }
 
@@ -81,7 +91,7 @@ class UserController extends Controller
 
         $ticket_answer = $ticket->ticket_answer;
         $ticket_answer->user_vote = $request->user_vote;
-        $ticket_answer->vote_date = Carbon::now()->toDateTimeString(); 
+        $ticket_answer->vote_date = Carbon::now()->toDateTimeString();
         $ticket_answer->save();
 
         $ticket->status = 'completed';
@@ -93,6 +103,20 @@ class UserController extends Controller
     public function reloadCaptcha(Request $request)
     {
         return response()->json(['captcha'=> captcha_img()]);
+    }
+
+    public function dataTable()
+    {
+        return view('user.datatable');
+    }
+
+    public function showTickets(Request $request)
+    {
+        $fields = ['tickets.id', 'tickets.course_name', 'tickets.course_id',
+                   'tickets.description', 'tickets.status', 'tickets.expire_date', 'tickets.created_at', 'tickets.updated_at'];
+
+        $results = processDataTable($request, $model_fullname=Ticket::class, $fields, $query='');
+        return response()->json($results, $results['status']);
     }
 
     public function temp()

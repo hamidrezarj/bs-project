@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         // 'ticket' => \App\Http\Middleware\TicketMiddleware::class,
         'is_owner' => \App\Http\Middleware\EnsureUserIsOwner::class,
         'expire_ticket' => \App\Http\Middleware\ExpireTicket::class,
+        'is_in_operating_hours' => \App\Http\Middleware\IsInOperatingHours::class,
     ];
 }

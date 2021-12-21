@@ -8,11 +8,20 @@
 
         @if (Cache::has('user-is-online-' . $support->id))
             <span class="text-success">فعال</span>
+
+            <a href="{{ route('support.deactivate') }}" onclick="event.preventDefault();
+                    document.getElementById('deactivate-form').submit();">
+                غیرفعال سازی
+            </a>
+
+            <form id="deactivate-form" action="{{ route('support.deactivate') }}" method="POST" class="d-none">
+                @csrf
+            </form>
         @else
             <span class="text-secondary">غیرفعال</span>
 
             <a href="{{ route('support.activate') }}" onclick="event.preventDefault();
-                document.getElementById('activate-form').submit();">
+                    document.getElementById('activate-form').submit();">
                 فعال سازی
             </a>
 

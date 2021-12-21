@@ -11,8 +11,10 @@ class TicketAnswer extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'description'
+    protected $guarded = [
+        'id',
+        'created_at',
+        'updated_at'
     ];
 
     public function ticket()
