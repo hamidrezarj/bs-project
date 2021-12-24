@@ -64,7 +64,7 @@ class RegisterController extends Controller
 
     public function showRegistrationForm()
     {
-        return view('auth.login-selfdesign');
+        return view('auth.register');
     }
 
     /**
@@ -82,13 +82,15 @@ class RegisterController extends Controller
             'national_code' => ['required', 'digits:10', 'unique:users'],
             'student_id'    => ['nullable', 'digits_between:7,8', 'unique:users'],
             'phone_number'  => ['required', 'unique:users', 'regex:/^(0){1}9\d{9}$/'],
+            'faculty'         => ['required'],
             'user_type'     => ['required'],
             'password'      => ['required', 'string', 'min:8', 'confirmed'],
         ], [], [
             'national_code' => 'کد ملی',
             'student_id' => 'شماره دانشجویی',
             'phone_number' => 'شماره تلفن',
-            'user_type' => 'نوع کاربر'
+            'user_type' => 'نوع کاربر',
+            'faculty' => 'دانشکده',
         ]);
     }
 

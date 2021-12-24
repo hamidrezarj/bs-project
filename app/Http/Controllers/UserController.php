@@ -21,21 +21,6 @@ class UserController extends Controller
         ]);
     }
 
-    public function show()
-    {
-        if (Auth::user()->cannot('show_profile')) {
-            return response()->json([
-                'status' => 403,
-                'message' => 'access to the requested resource is forbidden'
-            ], 403);
-        }
-
-        return response()->json([
-            'status' => 200,
-            'data' => Auth::user()
-        ]);
-    }
-
     public function showTicketForm()
     {
         return view('user.ticket_form');
@@ -115,12 +100,9 @@ class UserController extends Controller
         $fields = ['tickets.id', 'tickets.course_name', 'tickets.course_id',
                    'tickets.description', 'tickets.status', 'tickets.expire_date', 'tickets.created_at', 'tickets.updated_at'];
 
-        $results = processDataTable($request, $model_fullname=Ticket::class, $fields, $query='');
-        return response()->json($results, $results['status']);
-    }
+        $query = Ticket::where('user_id', auth()->user()->id);
 
-    public function temp()
-    {
-        return Auth::user()->roles()->first();
+        $results = processDataTable($request, $model_fullname='', $fields, $query);
+        return response()->json($results, $results['status']);
     }
 }

@@ -1,73 +1,83 @@
-@extends('layouts.app')
+@extends('layouts.base')
+
+@section('css')
+    <link rel="stylesheet" href="{{ asset('css/login-register.css') }}">
+@endsection()
+
+@section('title', 'ورود')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+    <!-- login -->
+    <div class="col d-flex flex-column justify-content-center align-items-center parent-of-cards-signin">
+        <div class="user-img-part">
+            <i class="fa fa-user"></i>
+        </div>
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
-
-                        <div class="form-group row">
-                            <label for="nationalCode" class="col-md-4 col-form-label text-md-right">کد ملی</label>
-
-                            <div class="col-md-6">
-                                <input id="nationalCode" type="text" class="form-control @error('national_code') is-invalid @enderror" name="national_code" value="{{ old('national_code') }}" required autocomplete="national_code" autofocus>
-
-                                @error('national_code')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">رمز عبور</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <label class="form-check-label" for="remember">
-                                        مرا به خاطر بسپار
-                                    </label>
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-                        
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    ورود
-                                </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        فراموشی رمز عبور
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </form>
+        <div class="login-box p-4 rounded">
+            <form class="needs-validation" method="POST" action="{{ route('login') }}" novalidate>
+                @csrf
+                <label class="form-label label-input-login">نام کاربری</label>
+                <div type="text" class="input-group rounded">
+                    <span class="input-group-text rounded-start"><i class="fa fa-user"></i></span>
+                    <input type="text" tabindex="1" class="form-control rounded-end px-4 input-cleaner" autocomplete="off"
+                        name="national_code" value="{{ old('national_code') }}" required>
                 </div>
-            </div>
+                <label class="form-label label-input-login">رمز عبور</label>
+                <div type="text" class="input-group rounded">
+                    <span class="input-group-text rounded-start"><i class="fa fa-key"></i></span>
+                    <input type="password" tabindex="1" class="form-control rounded-end px-4 pass-input input-cleaner"
+                        data-v-min-length="8" autocomplete="off" name="password" required>
+                    <span class="input-group-text rounded-start eye-pass"><i class="fa fa-eye-slash"></i></span>
+                </div>
+                <div class="login-box-footer d-flex justify-content-center">
+                    <button type="submit" class="btn w-50 mt-3 rounded btn-dark-self">ورود</button>
+                </div>
+                @foreach ($errors->all() as $error)
+                    <div class="alert alert-danger alert-dismissible fade show my-2" role="alert">
+                        <p>{{ $error }}</p>
+                    </div>
+                @endforeach
+                <div class="mt-2 d-flex justify-content-center align-items-center">
+                    <hr class="col">
+                    <a href="{{ route('register') }}">
+                        <p id="signUp" class="col up-or-in text-nowrap text-center mx-2 mb-0">ایجاد حساب کاربری</p>
+                    </a>
+                    <hr class="col">
+                </div>
+            </form>
+        </div>
+        <button id="verify-pass" class="btn btn-sm btn-forget-pass btn-light rounded-0 rounded-bottom">رمز عبور خود را
+            فراموش کرده اید؟</button>
+    </div>
+    <div class="col d-flex flex-column justify-content-center align-items-center forget-password d-none">
+        <label class="form-label label-input-login">ایمیل خود را وارد کنید</label>
+        <div type="text" class="input-group rounded">
+            <span class="input-group-text rounded-start"><i class="fa fa-user"></i></span>
+            <input type="email" tabindex="1" class="form-control rounded-end px-4 input-cleaner" autocomplete="off"
+                name="national_code" value="{{ old('national_code') }}">
         </div>
     </div>
-</div>
-@endsection
+    <!-- end login -->
+    <!-- verify -->
+    <div class="col d-flex flex-column justify-content-center align-items-center parent-of-cards-verify d-none">
+        <div class="verify-box p-4 rounded">
+            <form class="needs-validation" method="POST" action="{{ route('login') }}" novalidate>
+                @csrf
+                <label class="form-label label-input-verify">ایمیل خود را وارد کنید</label>
+                <div type="text" class="input-group rounded">
+                    <span class="input-group-text rounded-start"><i class="fa fa-envelope"></i></span>
+                    <input type="email" tabindex="1" class="form-control rounded-end px-4 input-cleaner" autocomplete="off"
+                        name="national_code" value="{{ old('national_code') }}" required>
+                </div>
+                <div class="verify-box-footer d-flex justify-content-center">
+                    <button type="submit" class="btn w-50 mt-3 rounded btn-dark-self">بازیابی</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- end veryfy -->
+@endsection()
+
+@section('script')
+    <script src="{{ asset('js/login-register.js') }}"></script>
+@endsection()

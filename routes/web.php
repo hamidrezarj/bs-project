@@ -35,6 +35,9 @@ Route::middleware('auth')->get('/', function () {
     return redirect($path);
 });
 
+Route::middleware('auth')->get('show', [BaseController::class, 'show'])->name('show');
+
+
 Auth::routes([]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -43,8 +46,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('reload-captcha', [UserController::class, 'reloadCaptcha']);
-
-Route::get('temp', [UserController::class, 'temp']);
 
 Route::get('info', function () {
     return Auth::user();
