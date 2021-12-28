@@ -19,7 +19,7 @@ class IsInOperatingHours
     {
         $now = Carbon::now();
         $open = new Carbon('09:00:00');
-        $end = new Carbon('21:59:00');
+        $end = new Carbon('23:59:00');
 
         if(!$now->between($open, $end, true)){
             return response()->json([

@@ -19,6 +19,7 @@ class CreateTicketsTable extends Migration
             $table->string('course_id');
             $table->text('description');
             $table->enum('status', ['open', 'answered', 'completed', 'failed']);
+            $table->tinyInteger('status_id')->nullable();
             $table->foreignId('user_id')->nullable()->references('id')->on('users')->onDelete('cascade');
             $table->timestamp('expire_date')->nullable();
             $table->timestamps();

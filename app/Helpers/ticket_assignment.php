@@ -38,22 +38,14 @@ if (!function_exists('getActiveSupports')) {
 if (!function_exists('assignPendingTicketToSupport')) {
     function assignPendingTicketsToSupport(User $user)
     {
-        $ticket_answer = new TicketAnswer;
-        $ticketAnswers = \DB::table('ticket_answers')
-                             ->join('tickets', 'ticket_answers.ticket_id', '=', 'tickets.id')
+        
+        $updated_rows = TicketAnswer::join('tickets', 'ticket_answers.ticket_id', '=', 'tickets.id')
                              ->where('status', 'open')
                              ->where('technical_id', 0)
-                             ->get('ticket_answers.*');
-
-        if (isset($ticketAnswers)) {
-            if (count($ticketAnswers) == 1) {
-                $user->ticket_answers()->save($ticketAnswers->first());
-            } else {
-                $user->ticket_answers()->saveMany($ticketAnswers);
-            }
-            return true;
-        }
-
-        return false;
+                             ->update([
+                                 'technical_id' => $user->id,
+                             ]);
+                             
+        return $updated_rows;
     }
 }

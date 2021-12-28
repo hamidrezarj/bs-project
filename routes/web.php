@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,14 +36,17 @@ Route::middleware('auth')->get('/', function () {
     return redirect($path);
 });
 
-Route::middleware('auth')->get('show', [BaseController::class, 'show'])->name('show');
-
-
-Auth::routes([]);
+Auth::routes([
+    'reset' => false,
+    'verify' => false,
+]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::middleware('auth')->group(function () {
+    Route::get('show', [BaseController::class, 'show'])->name('show');
+    Route::post('password/reset', [BaseController::class, 'resetPassword'])->name('password.reset');
+    Route::post('profile/update', [BaseController::class, 'updateProfile'])->name('profile.update');
 });
 
 Route::get('reload-captcha', [UserController::class, 'reloadCaptcha']);
@@ -56,7 +60,8 @@ Route::get('csrf', function () {
 });
 
 Route::get('login-dev', function () {
-    Auth::loginUsingId(1);
+    Auth::loginUsingId(5);
+    return Auth::user();
 });
 
 Route::get('temp', function () {
@@ -67,15 +72,12 @@ Route::get('clear_cache', function () {
     Illuminate\Support\Facades\Cache::forget('user-is-online-'. 3);
 });
 
-Route::get('use', function(){
-    $user = App\Models\User::create([
-        'first_name' => 'اسلام',
-        'last_name' => 'ناظمی',
-        'email' => 'nazemi@gmail.com',
-        'national_code' => '5632148541',
-        'user_type' => 'admin',
-        'password' => '12345678'
+Route::get('use', function () {
+    $expireDate = Carbon::now()->addDays(1);
+    $user = App\Models\User::where('first_name', 'سودا')->first();
+    $user->ticket_answers()->createMany([
+        ['description' => 'some shit'],
+        ['description' => 'some shit']
     ]);
 
-    $user->assignRole('admin');
 });

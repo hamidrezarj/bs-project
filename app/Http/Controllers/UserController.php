@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use App\Models\TicketAnswer;
 use App\Models\Ticket;
 use App\Models\User;
@@ -26,7 +27,7 @@ class UserController extends Controller
         return view('user.ticket_form');
     }
     
-    public function creatTicket(Request $request)
+    public function createTicket(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'course_name' => 'required|string',
@@ -40,6 +41,7 @@ class UserController extends Controller
 
         $ticket = auth()->user()->tickets()->create($request->all());
         $ticket->status = 'open';
+        $ticket->status_id = 1;
         $ticket->expire_date = Carbon::now()->addMinutes(5);
         $ticket->save();
 
@@ -58,31 +60,63 @@ class UserController extends Controller
         }
 
         $ticket->ticket_answer()->save($ticket_answer);
-        return redirect()->route('user.index');
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'ticket created successfully.'
+        ]);
+    }
+
+    public function deleteTicket(Request $request, Ticket $ticket)
+    {
+        Gate::authorize('delete', $ticket);
+
+        if ($ticket->status == 'open') {
+            $ticket->delete();
+            return response()->json([
+                'status' => 200,
+                'message' => 'ticket deleted successfully.'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 400,
+            'message' => 'ticket cannot be deleted.'
+        ], 400);
     }
 
     public function showTicketDetails(Request $request, Ticket $ticket)
     {
+        Gate::authorize('details', $ticket);
         return view('user.ticket', ['ticket' => $ticket]);
     }
 
     public function vote(Request $request, Ticket $ticket)
     {
-        $validator = Validator::make($request->all(), [
-            'user_vote' => 'required',
-        ], [
-            'user_vote.required' => 'لطفا یکی از گزینه های نظرسنجی را انتخاب کنید.'
-        ])->validate();
+        Gate::authorize('vote', $ticket);
 
+        $validator = Validator::make($request->all(), [
+            'vote' => 'required|in:1,2,3,4,5',
+        ], [
+            'vote.required' => 'لطفا یکی از گزینه های نظرسنجی را انتخاب کنید.'
+        ], [
+            'vote' => 'نظرسنجی'
+        ])->validate();
+    
         $ticket_answer = $ticket->ticket_answer;
-        $ticket_answer->user_vote = $request->user_vote;
+        $ticket_answer->user_id= Auth::user()->id;
+        $ticket_answer->vote_id = $request->vote;
         $ticket_answer->vote_date = Carbon::now()->toDateTimeString();
         $ticket_answer->save();
 
         $ticket->status = 'completed';
+        $ticket->status_id = 3;
         $ticket->save();
 
-        return redirect()->route('ticket.details', ['ticket' => $ticket])->with('status', 'نظرسنجی با موفقیت انجام شد.');
+        return response()->json([
+            'status' => 200,
+            'message' => 'نظرسنجی با موفقیت انجام شد.'
+        ]);
     }
 
     public function reloadCaptcha(Request $request)
@@ -98,7 +132,7 @@ class UserController extends Controller
     public function showTickets(Request $request)
     {
         $fields = ['tickets.id', 'tickets.course_name', 'tickets.course_id',
-                   'tickets.description', 'tickets.status', 'tickets.expire_date', 'tickets.created_at', 'tickets.updated_at'];
+                   'tickets.description', 'tickets.status_id', 'tickets.expire_date', 'tickets.created_at', 'tickets.updated_at'];
 
         $query = Ticket::where('user_id', auth()->user()->id);
 

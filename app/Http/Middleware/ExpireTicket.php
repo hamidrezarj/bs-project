@@ -23,26 +23,13 @@ class ExpireTicket
     {
         $now = Carbon::now()->toDateTimeString();
 
-        // if ($model == Ticket::class)
-        // {
-        $result = Ticket::where('status', 'open')
+        $result = Ticket::where('status_id', 1)
                     ->where('expire_date', '<', $now)
                     ->update([
-                        'status' => 'failed'
+                        'status' => 'failed',
+                        'status_id' => 4
                     ]);
-        // }
-        // elseif ($model == TicketAnswer::class)
-        // {
-        //     $result = Auth::user()->ticket_answers()
-        //             ->join('tickets', 'ticket_answers.ticket_id', '=', 'tickets.id')
-        //             ->where('tickets.status', 'open')
-        //             ->whereRaw('TIMESTAMPDIFF(MINUTE, tickets.created_at , ?) > ?', [$now, 10])
-        //             ->update([
-        //                 'status' => 'failed'
-        //             ]);
-        // }
 
-        
         return $next($request);
     }
 }

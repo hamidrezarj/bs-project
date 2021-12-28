@@ -27,6 +27,11 @@ class TicketAnswer extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function getCreatedAtFaAttribute()
     {
         return Jalalian::fromCarbon(new Carbon($this->created_at));

@@ -16,10 +16,11 @@ class CreateTicketAnswersTable extends Migration
         Schema::create('ticket_answers', function (Blueprint $table) {
             $table->id();
             $table->text('description')->nullable();
-            $table->integer('user_vote')->nullable();
+            $table->foreignId('vote_id')->nullable()->references('id')->on('votes');
             $table->foreignId('technical_id')->nullable()->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('ticket_id')->nullable()->references('id')->on('tickets')->onDelete('cascade');
             $table->timestamp('reply_date')->nullable();
+            $table->foreignId('user_id')->nullable()->references('id')->on('users');
             $table->timestamp('vote_date')->nullable();
             $table->timestamps();
         });

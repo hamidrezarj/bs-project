@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -29,6 +30,8 @@ class TechnicalSupportController extends Controller
 
     public function ticketDetails(Request $request, Ticket $ticket)
     {
+        Gate::authorize('details', $ticket->ticket_answer);
+
         return view('support.ticket', [
             'ticket' => $ticket
         ]);
@@ -36,6 +39,8 @@ class TechnicalSupportController extends Controller
 
     public function replyTicket(Request $request, Ticket $ticket)
     {
+        Gate::authorize('replyTicket', $ticket->ticket_answer);
+
         $validator = Validator::make($request->all(), [
             'description' => 'required|string',
         ])->validate();
@@ -46,6 +51,7 @@ class TechnicalSupportController extends Controller
         $ticket_answer->save();
 
         $ticket->status = 'answered';
+        $ticket->status_id = 2;
         $ticket->save();
 
         return redirect()->route('support.index');

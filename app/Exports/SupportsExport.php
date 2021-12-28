@@ -11,6 +11,7 @@ use PhpOffice\PhpSpreadsheet\Chart\Legend;
 use PhpOffice\PhpSpreadsheet\Chart\Title;
 
 use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
@@ -24,18 +25,28 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\TicketAnswer;
 
-class SupportsExport implements FromQuery, FromView, WithHeadings, WithStyles, WithEvents, ShouldAutoSize, WithCharts
+class SupportsExport implements FromQuery, WithHeadings, WithStyles, WithEvents, ShouldAutoSize, WithCharts
 {
-    public function __construct(int $supportId)
+    public function __construct(int $supportId, $from_date, $to_date, $performance)
     {
         $this->supportId = $supportId;
+        $this->from_date = $from_date;
+        $this->to_date = $to_date;
+        $this->performance = $performance;
     }
 
     public function registerEvents(): array
     {
         return [
+            BeforeSheet::class => function (BeforeSheet $event) {
+                // $event->sheet->getDelegate()->getParent()->getDefaultStyle()->getFont()->setName('B Mitra');
+            },
             AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getDelegate()->getParent()->getDefaultStyle()->getFont()->setName('B Mitra');
+                $default_font_style = [
+                    'font' => ['name' => 'B Nazanin', 'size' => 10]
+                ];
+                $event->sheet->getDelegate()->getParent()->getDefaultStyle()->applyFromArray($default_font_style);
+                $event->sheet->setCellValue('D2', $this->performance);
             },
         ];
     }
@@ -43,7 +54,7 @@ class SupportsExport implements FromQuery, FromView, WithHeadings, WithStyles, W
     public function styles(Worksheet $sheet)
     {
         return [
-            1    => ['font' => ['bold' => true, 'size' => 12]],
+            1    => ['font' => ['name' => 'B Mitra', 'bold' => true, 'size' => 12]],
         ];
     }
 
@@ -52,7 +63,8 @@ class SupportsExport implements FromQuery, FromView, WithHeadings, WithStyles, W
         return [
             'تعداد تیکت',
             'امتیاز کاربران',
-            'مقدار'
+            'مقدار',
+            'امتیاز نهائی'
         ];
     }
 
@@ -81,7 +93,7 @@ class SupportsExport implements FromQuery, FromView, WithHeadings, WithStyles, W
         
         $series = new DataSeries(
             DataSeries::TYPE_BARCHART, // plotType
-            DataSeries::GROUPING_STANDARD, // plotGrouping
+            DataSeries::GROUPING_CLUSTERED, // plotGrouping
             range(0, count($dataSeriesValues) - 1), // plotOrder
             $dataSeriesLabels, // plotLabel
             $xAxisTickValues, // plotCategory
@@ -115,24 +127,13 @@ class SupportsExport implements FromQuery, FromView, WithHeadings, WithStyles, W
 
     public function query()
     {
-        return TicketAnswer::query()->where('technical_id', $this->supportId)
-                 ->WhereNotNull('user_vote')
-                 ->groupBy('user_vote')
-                 ->selectRaw("count(*) as total,
-                              CASE 
-                                    WHEN user_vote = 1 THEN 'بسیار ضعیف'
-                                    WHEN user_vote = 2 THEN 'ضعیف'
-                                    WHEN user_vote = 3 THEN 'متوسط'
-                                    WHEN user_vote = 4 THEN 'خوب'
-                                    WHEN user_vote = 5 THEN 'عالی'
-                              END AS vote, 
-                              user_vote");
-    }
+        $timeInterval = [$this->from_date, $this->to_date];
+        return TicketAnswer::join('votes', 'ticket_answers.vote_id', '=', 'votes.id')
+                           ->where('technical_id', $this->supportId)
+                           ->WhereNotNull('vote_id')
+                           ->whereBetween('ticket_answers.reply_date', $timeInterval)
+                           ->groupBy('vote_id')
+                           ->selectRaw("count(votes.id), votes.id, votes.name");
 
-    public function view(): View
-    {
-        return view('exports.invoices', [
-            'invoices' => Invoice::all()
-        ]);
     }
 }

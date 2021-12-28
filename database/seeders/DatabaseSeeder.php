@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use Carbon\Carbon;
 
 class DatabaseSeeder extends Seeder
 {
@@ -27,6 +28,15 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $u1->assignRole('user');
+        $expireDate = Carbon::now()->addMinutes(5);
+        $expireDate2 = Carbon::now()->addDays(2);
+        $u1->tickets()->createMany([
+            ['course_name' => 'هوش محاسباتی', 'course_id' => 654123987, 'description' => 'some shit', 'expire_date' => $expireDate, 'status' => 'open', 'status_id' => 1],
+            ['course_name' => 'معادلات', 'course_id' => 541236987, 'description' => "a discusting dog's poop", 'expire_date' => $expireDate, 'status' => 'open', 'status_id' => 1],
+            ['course_name' => 'ریزپردازنده', 'course_id' => 741258963, 'description' => 'درسش حامله کنه', 'expire_date' => $expireDate2, 'status' => 'answered', 'status_id' => 2],
+            ['course_name' => 'نظریه زبان ها', 'course_id' => 123654741, 'description' => 'این که خدای کصشره', 'expire_date' => $expireDate2, 'status' => 'completed', 'status_id' => 3],
+            ['course_name' => 'هوش محاسباتی', 'course_id' => 654123987, 'description' => 'some shit', 'expire_date' => $expireDate2, 'status' => 'failed', 'status_id' => 4],
+        ]);
 
         $u2 = User::create([
             'first_name' => 'فاطمه',
@@ -64,7 +74,7 @@ class DatabaseSeeder extends Seeder
 
         $u4->assignRole('technical_support');
 
-        $admin = App\Models\User::create([
+        $admin = User::create([
             'first_name' => 'اسلام',
             'last_name' => 'ناظمی',
             'email' => 'nazemi@gmail.com',

@@ -21,9 +21,9 @@ Route::middleware(['role:user'])->group(function () {
 
     Route::get('ticket', [UserController::class, 'showTicketForm'])->name('ticket_form')->middleware('is_in_operating_hours:'. Ticket::class);
     Route::get('ticket/{ticket}', [UserController::class, 'showTicketDetails'])->name('ticket.details')
-                                                                               ->middleware(['is_owner:'. Ticket::class,
-                                                                                             'expire_ticket:'. Ticket::class]);
-    Route::post('ticket/create', [UserController::class, 'creatTicket'])->name('create_ticket')->middleware('is_in_operating_hours:'. Ticket::class);
+                                                                               ->middleware('expire_ticket:'. Ticket::class);
+    Route::post('ticket/store', [UserController::class, 'createTicket'])->name('ticket.store')->middleware('is_in_operating_hours:'. Ticket::class);
+    Route::delete('ticket/delete/{ticket}', [UserController::class, 'deleteTicket'])->name('ticket.delete');
     Route::post('ticket/vote/{ticket}', [UserController::class, 'vote'])->name('ticket.vote');
 
     Route::get('datatable', [UserController::class, 'dataTable']);

@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#082032">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ asset('css/lib/fontiran.css') }}">
     <link rel="stylesheet" href="{{ asset('css/lib/datatables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/lib/bootstrap.min.css') }}">
@@ -12,13 +14,18 @@
     <link rel="stylesheet" href="{{ asset('css/lib/persian-datepicker.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/lib/sweetalert.min.css') }}">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
-        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ asset('css/lib/mainstyles.css') }}">
     @yield('css')
     <title>@yield('title')</title>
 </head>
 
 <body>
+    <!-- logout form -->
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+        @csrf
+    </form>
+    <!-- end logout form -->
     <div class="loader-box d-flex align-items-center justify-content-center w-100 h-100 d-none">
         <div class="loader">
             <svg viewBox="0 0 120 120" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -34,7 +41,82 @@
         </div>
     </div>
     @yield('profile')
-    <div class="container self-style">
+    <div class="modal fade" id="reset_pass_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h6 class="modal-title">تغییر رمز عبور</h6>
+                <button type="button" class="close p-0 m-0 border-0 bg-transparent" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i></button>
+                </div>
+                <div class="modal-body my-2">
+                    <form class="needs-validation" id="change_pass_form" novalidate>
+                        <label class="form-label label-input-login">رمز عبور فعلی</label>
+                        <div type="text" class="input-group rounded">
+                            <span class="input-group-text rounded-0 rounded-start"><i class="fa fa-key"></i></span>
+                            <input id="password_last" type="password" tabindex="1" class="form-control rounded-0 border-start-0 px-4 input-cleaner pass-input"
+                                data-v-min-length="8" autocomplete="off" name="password-last" required>
+                            <span class="input-group-text rounded-0 rounded-end eye-pass"><i class="fa fa-eye-slash"></i></span>
+                        </div>
+                        <label class="form-label label-input-login">رمز عبور جدید</label>
+                        <div type="text" class="input-group rounded">
+                            <span class="input-group-text rounded-0 rounded-start"><i class="fa fa-key"></i></span>
+                            <input id="pasword_new" type="password" tabindex="1" class="form-control rounded-0 border-start-0 px-4 input-cleaner pass-input"
+                                data-v-min-length="8" autocomplete="off" name="password-new" required>
+                            <span class="input-group-text rounded-0 rounded-end eye-pass"><i class="fa fa-eye-slash"></i></span>
+                        </div>
+                        <label class="form-label label-input-login">تکرار رمز عبور جدید</label>
+                        <div type="text" class="input-group rounded">
+                            <span class="input-group-text rounded-0 rounded-start"><i class="fa fa-key"></i></span>
+                            <input id="password_confirmation" type="password" tabindex="1" class="form-control rounded-0 border-start-0 px-4 input-cleaner pass-input"
+                                data-v-equal="#pasword_new" data-v-min-length="8" autocomplete="off" name="password-confirm" required>
+                            <span class="input-group-text rounded-0 rounded-end eye-pass"><i class="fa fa-eye-slash"></i></span>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button form="change_pass_form" id="change_pass_cta" type="button" class="btn btn-success">ثبت</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="edit_profile_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h6 class="modal-title">ویرایش اطلاعات کاربری</h6>
+                <button type="button" class="close p-0 m-0 border-0 bg-transparent" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i></button>
+                </div>
+                <div class="modal-body my-2">
+                    <form class="needs-validation" id="edit_profile_form" novalidate>
+                        <label for="user_name" class="form-label label-input-login">نام کاربری</label>
+                        <input id="user_name" type="text" tabindex="1" class="form-control px-4 input-cleaner"
+                        data-v-min-length="8" autocomplete="off" name="user-name" required>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button form="edit_profile_form" id="edit_profile_cta" type="button" class="btn btn-success">ویرایش</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="user_data_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title">مشخصات کاربری</h6>
+                    <button type="button" class="close p-0 m-0 border-0 bg-transparent" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i></button>
+                </div>
+                <div class="modal-body my-2">
+                    <div class="my-2 d-flex align-items-center"><span class="user-title">نام کاربری: </span><span id="full_name" class="user-body ms-2"></span><hr class="col ms-2"></div>
+                    <div class="my-2 d-flex align-items-center"><span class="user-title">کدملی: </span><span id="national_code" class="user-body ms-2"></span><hr class="col ms-2"></div>
+                    <div class="my-2 d-flex align-items-center"><span class="user-title">تاریخ ثبت نام: </span><span id="created_at" class="user-body ms-2"></span><hr class="col ms-2"></div>
+                    <div class="my-2 d-flex align-items-center"><span class="user-title">رشته: </span><span id="faculty" class="user-body ms-2"></span><hr class="col ms-2"></div>
+                    <div class="my-2 d-flex align-items-center"><span class="user-title">ایمیل: </span><span id="email" class="user-body ms-2"></span><hr class="col ms-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid self-style">
         @yield('content')
     </div>
     <script src="{{ asset('js/lib/jquery-3.6.0.min.js') }}"></script>
