@@ -60,7 +60,7 @@ Route::get('csrf', function () {
 });
 
 Route::get('login-dev', function () {
-    Auth::loginUsingId(5);
+    Auth::loginUsingId(1);
     return Auth::user();
 });
 
@@ -73,11 +73,10 @@ Route::get('clear_cache', function () {
 });
 
 Route::get('use', function () {
-    $expireDate = Carbon::now()->addDays(1);
-    $user = App\Models\User::where('first_name', 'سودا')->first();
-    $user->ticket_answers()->createMany([
-        ['description' => 'some shit'],
-        ['description' => 'some shit']
-    ]);
-
+    // $user = App\Models\User::find(1);
+    // $user->national_code = '1234567890';
+    // $user->password = '12345678';
+    // $user->save();
+    $ticket = App\Models\Ticket::find(6);
+    dd($ticket->ticket_answer->technical_support);
 });

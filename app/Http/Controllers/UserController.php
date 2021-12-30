@@ -88,7 +88,15 @@ class UserController extends Controller
     public function showTicketDetails(Request $request, Ticket $ticket)
     {
         Gate::authorize('details', $ticket);
-        return view('user.ticket', ['ticket' => $ticket]);
+        $data = TicketAnswer::join('users', 'ticket_answers.technical_id', 'users.id')
+                            ->where('ticket_answers.ticket_id', $ticket->id)
+                            ->selectRaw('ticket_answers.*, CONCAT(users.first_name, " ", users.last_name) as technical_full_name')
+                            ->get();
+                            
+        return response()->json([
+            'status' => 200,
+            'data' => $data
+        ]);
     }
 
     public function vote(Request $request, Ticket $ticket)

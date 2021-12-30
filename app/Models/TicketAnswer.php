@@ -24,7 +24,7 @@ class TicketAnswer extends Model
 
     public function technical_support()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'technical_id');
     }
 
     public function user()

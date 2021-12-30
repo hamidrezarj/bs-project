@@ -16,5 +16,6 @@ use App\Http\Controllers\AdminController;
 
 Route::group(['middleware' => ['role:admin']], function () {
     Route::get('', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.index');
-    Route::get('report/support/{support}', [App\Http\Controllers\AdminController::class, 'getReport'])->name('admin.report');
+    Route::get('performance_report/support/{support}', [App\Http\Controllers\AdminController::class, 'getPerformanceReport'])->name('admin.performance_report');
+    Route::get('response_rate_report/support/{support}', [App\Http\Controllers\AdminController::class, 'getResponseRateReport'])->name('admin.response_rate_report');
 });

@@ -74,7 +74,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button form="change_pass_form" id="change_pass_cta" type="button" class="btn btn-success">ثبت</button>
+                    <button type="submit" form="change_pass_form" id="change_pass_cta" class="btn btn-success">ثبت</button>
                 </div>
             </div>
         </div>
@@ -88,13 +88,40 @@
                 </div>
                 <div class="modal-body my-2">
                     <form class="needs-validation" id="edit_profile_form" novalidate>
-                        <label for="user_name" class="form-label label-input-login">نام کاربری</label>
-                        <input id="user_name" type="text" tabindex="1" class="form-control px-4 input-cleaner"
-                        data-v-min-length="8" autocomplete="off" name="user-name" required>
+                        <div class="input-parent">
+                            <label for="first_name_ep" class="form-label fw-bolder">نام</label>
+                            <input id="first_name_ep" type="text" tabindex="1" class="form-control px-4 input-cleaner"
+                            autocomplete="off" name="first-name" required>
+                        </div>
+                        <div class="input-parent">
+                            <label for="last_name_ep" class="form-label fw-bolder">نام خانوادگی</label>
+                            <input id="last_name_ep" type="text" tabindex="1" class="form-control px-4 input-cleaner"
+                            autocomplete="off" name="last-name" required>
+                        </div>
+                        <div class="input-parent">
+                            <label for="email_ep" class="form-label fw-bolder">ایمیل</label>
+                            <input id="email_ep" type="email" tabindex="1" class="form-control px-4 input-cleaner"
+                            autocomplete="off" name="email" required>
+                        </div>
+                        <div class="input-parent">
+                            <label for="national_code_ep" class="form-label fw-bolder">کدملی</label>
+                            <input id="national_code_ep" type="text" tabindex="1" class="form-control px-4 input-cleaner"
+                            autocomplete="off" name="national-code" required>
+                        </div>
+                        <div class="input-parent">
+                            <label for="faculty_ep" class="form-label fw-bolder">دانشکده</label>
+                            <input id="faculty_ep" type="text" tabindex="1" class="form-control px-4 input-cleaner"
+                            autocomplete="off" name="faculty" required>
+                        </div>
+                        <div class="input-parent">
+                            <label for="phone_number_ep" class="form-label fw-bolder">شماره موبایل</label>
+                            <input id="phone_number_ep" type="text" tabindex="1" class="form-control px-4 input-cleaner"
+                            autocomplete="off" name="phone-number" required>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button form="edit_profile_form" id="edit_profile_cta" type="button" class="btn btn-success">ویرایش</button>
+                    <button form="edit_profile_form" id="edit_profile_cta" type="submit" class="btn btn-success">ویرایش</button>
                 </div>
             </div>
         </div>
@@ -119,6 +146,7 @@
     <div class="container-fluid self-style">
         @yield('content')
     </div>
+    @yield('footer')
     <script src="{{ asset('js/lib/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('js/lib/datatables.min.js') }}"></script>
     <script src="{{ asset('js/lib/bootstrap.min.js') }}"></script>

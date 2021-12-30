@@ -47,7 +47,7 @@
 
             <div class="d-flex justify-content-between">
                 <div style="width: 47%">
-                    <label class="form-label label-input-login">شماره تلفن</label>
+                    <label class="form-label label-input-login">شماره موبایل</label>
                     <input type="text" tabindex="1" name="phone_number" value="{{ old('phone_number') }}" required
                         class="form-control rounded px-4 input-cleaner" autocomplete="off">
 

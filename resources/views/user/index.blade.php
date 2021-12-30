@@ -90,8 +90,48 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="ticket_answer_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-body my-2">
+                    <div class="d-flex justify-content-center align-items-center text-center">
+                        <hr class="col">
+                        <div class="col text-nowrap">نام کارشناس: <span class="who-answered fw-bolder"></span></div>
+                        <hr class="col">
+                    </div>
+                    <div class="mt-5">
+                        <h6>پاسخ کارشناس: </h6>
+                        <div class="p-3 border rounded">
+                            <p class="answer w-100"></p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="d-flex justify-content-center align-items-center text-center">
+                            <hr class="col">
+                            <div class="col text-nowrap">بررسی عملکرد کارشناس</div>
+                            <hr class="col">
+                        </div>
+                        <div>
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                عملکرد کارشناس مربوطه را چطور ارزیابی میکنید
+                            </label>
+                            <input class="form-check-input" type="radio" name="vote" id="flexRadioDefault1">
+                            <input class="form-check-input" type="radio" name="vote" id="flexRadioDefault1">
+                            <input class="form-check-input" type="radio" name="vote" id="flexRadioDefault1">
+                            <input class="form-check-input" type="radio" name="vote" id="flexRadioDefault1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
-
+@section('footer')
+    <div class="footer d-flex align-items-center justify-content-between">
+        <div class="university-name ms-4">سامانه ثبت تیکت دانشگاه شهید بهشتی</div>
+        <div class="me-4">تاریخ: ( <span class="date-place"></span> )</div>
+    </div>
+@endsection()
 @section('script')
     <script type = "module" src="{{ asset('js/user.js') }}"></script>
 @endsection()
