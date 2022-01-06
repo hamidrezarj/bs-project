@@ -38,13 +38,12 @@
                     <th class="filter-select text-center" data-select-name='[" در انتظار پاسخ" , "پاسخ داده شده", "تکمیل شده" , "نا موفق" ]' data-select-value='[1,2,3,4]'>وضعیت</th>
                     <th class="filter-date text-center">تاریخ انقضا</th>
                     <th class="filter-date text-center">تاریخ ثبت</th>
-                    <th class="filter-date text-center">تاریخ بروزرسانی</th>
                     <th class="filter-none text-center">عملیات</th>
                 </tr>
             </thead>
         </table>
     </div>
-    <div class="modal fade" id="add_ticket_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="add_ticket_modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <form class="needs-validation" id="add_ticket_form" novalidate>
@@ -77,7 +76,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="description_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="description_modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
             <div class="modal-header">
@@ -90,7 +89,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="ticket_answer_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="ticket_answer_voting_modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-body my-2">
@@ -99,26 +98,57 @@
                         <div class="col text-nowrap">نام کارشناس: <span class="who-answered fw-bolder"></span></div>
                         <hr class="col">
                     </div>
-                    <div class="mt-5">
+                    <div class="mt-4">
                         <h6>پاسخ کارشناس: </h6>
                         <div class="p-3 border rounded">
                             <p class="answer w-100"></p>
                         </div>
                     </div>
-                    <div>
+                    <h6 class="mt-4 text-danger">*برای تکمیل تیکت خود و بهبود عملکرد کارشناسان لطفا بخش نظرسنجی را تکمیل کنید.</h6>
+                    <div class="mt-1">
                         <div class="d-flex justify-content-center align-items-center text-center">
                             <hr class="col">
                             <div class="col text-nowrap">بررسی عملکرد کارشناس</div>
                             <hr class="col">
                         </div>
-                        <div>
-                            <label class="form-check-label" for="flexRadioDefault1">
-                                عملکرد کارشناس مربوطه را چطور ارزیابی میکنید
-                            </label>
-                            <input class="form-check-input" type="radio" name="vote" id="flexRadioDefault1">
-                            <input class="form-check-input" type="radio" name="vote" id="flexRadioDefault1">
-                            <input class="form-check-input" type="radio" name="vote" id="flexRadioDefault1">
-                            <input class="form-check-input" type="radio" name="vote" id="flexRadioDefault1">
+                        <div class="mt-3 mb-3 text-center">
+                            <h6>عملکرد کارشناس مربوطه را چطور ارزیابی میکنید؟</h6>
+                            <form class="needs-validation" id="voting_form" novalidate>
+                                <div class="mt-2">
+                                    <label class="form-check-label" for="worst">بسیار ضعیف</label>
+                                    <input class="form-check-input radio-vote" type="radio" data-vote-id-input="1" name="vote" id="worst" required>
+                                    <label class="form-check-label" for="bad">ضعیف</label>
+                                    <input class="form-check-input radio-vote" type="radio" data-vote-id-input="2" name="vote" id="bad" required>
+                                    <label class="form-check-label" for="normal">متوسط</label>
+                                    <input class="form-check-input radio-vote" type="radio" data-vote-id-input="3" name="vote" id="normal" required>
+                                    <label class="form-check-label" for="good">خوب</label>
+                                    <input class="form-check-input radio-vote" type="radio" data-vote-id-input="4" name="vote" id="good" required>
+                                    <label class="form-check-label" for="excellent">عالی</label>
+                                    <input class="form-check-input radio-vote" type="radio" data-vote-id-input="5" name="vote" id="excellent" required>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button form="voting_form" id="voting_cta" data-row-id="" data-vote-id="" type="submit" class="btn btn-success">ارسال نظر</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="ticket_answer_modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-body my-2">
+                    <div class="d-flex justify-content-center align-items-center text-center">
+                        <hr class="col">
+                        <div class="col text-nowrap">نام کارشناس: <span class="who-answered fw-bolder"></span></div>
+                        <hr class="col">
+                    </div>
+                    <div class="mt-4">
+                        <h6>پاسخ کارشناس: </h6>
+                        <div class="p-3 border rounded">
+                            <p class="answer w-100"></p>
                         </div>
                     </div>
                 </div>

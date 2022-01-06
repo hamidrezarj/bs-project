@@ -60,7 +60,7 @@ Route::get('csrf', function () {
 });
 
 Route::get('login-dev', function () {
-    Auth::loginUsingId(1);
+    Auth::loginUsingId(3);
     return Auth::user();
 });
 

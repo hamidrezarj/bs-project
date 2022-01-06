@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Ticket;
+use App\Models\User;
 use Carbon\Carbon;
 
 class TechnicalSupportController extends Controller
@@ -26,6 +27,23 @@ class TechnicalSupportController extends Controller
             'support' => $support,
             'tickets' => $assigned_tickets
         ]);
+    }
+
+    public function showTickets(Request $request)
+    {
+        $fields = ['tickets.id', 'users.id', 'users.first_name', 'users.last_name','tickets.course_name', 'tickets.course_id',
+                   'tickets.description', 'tickets.status_id', 'tickets.expire_date', 'tickets.created_at'];
+
+        $aliases = ['', 'user_id', '', '', '', '', '', '', '', ''];
+        $select = makeSelectQuery($fields, $aliases);
+
+        $query = User::join('tickets', 'users.id', '=', 'tickets.user_id')
+                     ->join('ticket_answers', 'tickets.id', '=', 'ticket_answers.ticket_id')
+                     ->where('technical_id', auth()->user()->id)
+                     ->selectRaw($select);
+
+        $results = processDataTable($request, $model_fullname='', $fields, $query);
+        return response()->json($results, $results['status']);
     }
 
     public function ticketDetails(Request $request, Ticket $ticket)
@@ -54,7 +72,10 @@ class TechnicalSupportController extends Controller
         $ticket->status_id = 2;
         $ticket->save();
 
-        return redirect()->route('support.index');
+        return response()->json([
+            'status' => 200,
+            'message' => 'reply stored succussfully.'
+        ]);
     }
 
     public function activate()
@@ -65,12 +86,20 @@ class TechnicalSupportController extends Controller
 
         assignPendingTicketsToSupport(Auth::user());
 
-        return redirect()->route('support.index');
+        return response()->json([
+            'status' => 200,
+            'message' => 'support activated successfully.'
+        ]);
     }
 
     public function deactivate()
     {
         Cache::forget('user-is-online-'. Auth::user()->id);
-        return redirect()->route('support.index');
+        
+        return response()->json([
+            'status' => 200,
+            'message' => 'support deactivated successfully.'
+        ]);
+
     }
 }

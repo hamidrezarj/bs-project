@@ -32,6 +32,6 @@ class TicketAnswerPolicy
 
     public function replyTicket(User $user, TicketAnswer $ticketAnswer)
     {
-        return $user->id == $ticketAnswer->technical_id;
+        return $user->id == $ticketAnswer->technical_id && $ticketAnswer->description == null;
     }
 }

@@ -89,32 +89,32 @@
                 <div class="modal-body my-2">
                     <form class="needs-validation" id="edit_profile_form" novalidate>
                         <div class="input-parent">
-                            <label for="first_name_ep" class="form-label fw-bolder">نام</label>
+                            <label for="first_name_ep" class="form-label fw-bolder mb-1">نام</label>
                             <input id="first_name_ep" type="text" tabindex="1" class="form-control px-4 input-cleaner"
                             autocomplete="off" name="first-name" required>
                         </div>
-                        <div class="input-parent">
-                            <label for="last_name_ep" class="form-label fw-bolder">نام خانوادگی</label>
+                        <div class="input-parent mt-2">
+                            <label for="last_name_ep" class="form-label fw-bolder mb-1">نام خانوادگی</label>
                             <input id="last_name_ep" type="text" tabindex="1" class="form-control px-4 input-cleaner"
                             autocomplete="off" name="last-name" required>
                         </div>
-                        <div class="input-parent">
-                            <label for="email_ep" class="form-label fw-bolder">ایمیل</label>
+                        <div class="input-parent mt-2">
+                            <label for="email_ep" class="form-label fw-bolder mb-1">ایمیل</label>
                             <input id="email_ep" type="email" tabindex="1" class="form-control px-4 input-cleaner"
                             autocomplete="off" name="email" required>
                         </div>
-                        <div class="input-parent">
-                            <label for="national_code_ep" class="form-label fw-bolder">کدملی</label>
+                        <div class="input-parent mt-2">
+                            <label for="national_code_ep" class="form-label fw-bolder mb-1">کدملی</label>
                             <input id="national_code_ep" type="text" tabindex="1" class="form-control px-4 input-cleaner"
                             autocomplete="off" name="national-code" required>
                         </div>
-                        <div class="input-parent">
-                            <label for="faculty_ep" class="form-label fw-bolder">دانشکده</label>
+                        <div class="input-parent mt-2">
+                            <label for="faculty_ep" class="form-label fw-bolder mb-1">دانشکده</label>
                             <input id="faculty_ep" type="text" tabindex="1" class="form-control px-4 input-cleaner"
                             autocomplete="off" name="faculty" required>
                         </div>
-                        <div class="input-parent">
-                            <label for="phone_number_ep" class="form-label fw-bolder">شماره موبایل</label>
+                        <div class="input-parent mt-2">
+                            <label for="phone_number_ep" class="form-label fw-bolder mb-1">شماره موبایل</label>
                             <input id="phone_number_ep" type="text" tabindex="1" class="form-control px-4 input-cleaner"
                             autocomplete="off" name="phone-number" required>
                         </div>
@@ -137,7 +137,7 @@
                     <div class="my-2 d-flex align-items-center"><span class="user-title">نام کاربری: </span><span id="full_name" class="user-body ms-2"></span><hr class="col ms-2"></div>
                     <div class="my-2 d-flex align-items-center"><span class="user-title">کدملی: </span><span id="national_code" class="user-body ms-2"></span><hr class="col ms-2"></div>
                     <div class="my-2 d-flex align-items-center"><span class="user-title">تاریخ ثبت نام: </span><span id="created_at" class="user-body ms-2"></span><hr class="col ms-2"></div>
-                    <div class="my-2 d-flex align-items-center"><span class="user-title">رشته: </span><span id="faculty" class="user-body ms-2"></span><hr class="col ms-2"></div>
+                    <div class="my-2 d-flex align-items-center"><span class="user-title">دانشکده: </span><span id="faculty" class="user-body ms-2"></span><hr class="col ms-2"></div>
                     <div class="my-2 d-flex align-items-center"><span class="user-title">ایمیل: </span><span id="email" class="user-body ms-2"></span><hr class="col ms-2"></div>
                 </div>
             </div>

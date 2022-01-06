@@ -15,11 +15,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $tickets = Auth()->user()->tickets()->orderBy('created_at', 'desc')->paginate(5)->withQueryString();
-        return view('user.index', [
-            'tickets' => $tickets,
-            'user' => Auth::user(),
-        ]);
+        return view('user.index');
     }
 
     public function showTicketForm()
