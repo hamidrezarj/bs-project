@@ -12,7 +12,6 @@ use PhpOffice\PhpSpreadsheet\Chart\Title;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
@@ -25,15 +24,15 @@ use Maatwebsite\Excel\Events\BeforeSheet;
 use Illuminate\Support\Facades\DB;
 use App\Models\TicketAnswer;
 
-class ResponseRateExport implements FromQuery, WithHeadings, WithStyles, WithEvents, ShouldAutoSize, WithCharts
+use Maatwebsite\Excel\Concerns\FromCollection;
+
+class TotalPerformanceExport implements FromQuery, WithHeadings, WithStyles, WithEvents, ShouldAutoSize, WithCharts
 {
-    public function __construct(int $supportId, $from_date, $to_date, $full_name, $responseRate)
+    public function __construct($from_date, $to_date, $votes)
     {
-        $this->supportId = $supportId;
         $this->from_date = $from_date;
         $this->to_date = $to_date;
-        $this->full_name = $full_name;
-        $this->responseRate = $responseRate;
+        $this->votes = $votes;
     }
 
     public function registerEvents(): array
@@ -45,20 +44,17 @@ class ResponseRateExport implements FromQuery, WithHeadings, WithStyles, WithEve
                 $default_font_style = [
                     'font' => ['name' => 'B Nazanin', 'size' => 11]
                 ];
+
                 $event->sheet->getDelegate()->getParent()->getDefaultStyle()->applyFromArray($default_font_style);
-
-                $event->sheet->setCellValue('D2', $this->supportId);
-                $event->sheet->setCellValue('E2', $this->full_name);
-
+                
                 $fromDate = verta($this->from_date)->format('H:i Y/m/d');
                 $toDate = verta($this->to_date)->format('H:i Y/m/d');
-                $dateInterval = 'از تاریخ '. $fromDate. ' تا '. $toDate;
-                $event->sheet->setCellValue('F2', $dateInterval);
+                $date = 'از تاریخ '. $fromDate. ' تا '. $toDate;
+                $event->sheet->setCellValue('E2', $date);
 
                 $now = verta()->format('Y/m/d');
-                $event->sheet->setCellValue('G2', $now);
-
-                $event->sheet->setCellValue('C2', $this->responseRate);
+                $event->sheet->setCellValue('F2', $now);
+                
             },
         ];
     }
@@ -73,41 +69,42 @@ class ResponseRateExport implements FromQuery, WithHeadings, WithStyles, WithEve
     public function headings(): array
     {
         return [
-            'تعداد تیکت',
-            'وضعیت',
-            'درصد پاسخگویی',
             'کد پشتیبان',
             'نام و نام خانوادگی',
+            'تعداد تیکت',
+            'امتیاز نهائی',
             'بازه زمانی گزارش',
             'تاریخ'
-        ];
-    }
-
-    public function columnFormats(): array
-    {
-        return [
-            'F' => NumberFormat::FORMAT_DATE_DDMMYYYY,
         ];
     }
 
     public function charts()
     {
         $dataSeriesLabels = [
-            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, 'Worksheet!$B$2', null, 1),
-            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, 'Worksheet!$B$3', null, 1),
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, null, null, 1, ['نظرسنجی نشده']),
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, null, null, 1, ['بسیار ضعیف']),
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, null, null, 1, ['ضعیف']),
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, null, null, 1, ['متوسط']),
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, null, null, 1, ['خوب']),
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, null, null, 1, ['عالی']),
         ];
         
         $xAxisTickValues = [
-            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, '', null, 1),
-            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, '', null, 1),
-            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, '', null, 1),
-            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, '', null, 1),
-            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, '', null, 1),
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, null, null, 1, [1]),
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, null, null, 1, [2]),
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, null, null, 1, [3]),
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, null, null, 1, [4]),
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, null, null, 1, [5]),
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, null, null, 1, [6]),
         ];
         
         $dataSeriesValues = [
-            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_NUMBER, 'Worksheet!$A$2', null, 1),
-            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_NUMBER, 'Worksheet!$A$3', null, 1),
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_NUMBER, null, null, 1, [$this->votes[0]]),
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_NUMBER, null, null, 1, [$this->votes[1]]),
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_NUMBER, null, null, 1, [$this->votes[2]]),
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_NUMBER, null, null, 1, [$this->votes[3]]),
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_NUMBER, null, null, 1, [$this->votes[4]]),
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_NUMBER, null, null, 1, [$this->votes[5]]),
         ];
         
         
@@ -125,7 +122,7 @@ class ResponseRateExport implements FromQuery, WithHeadings, WithStyles, WithEve
         $plotArea = new PlotArea(null, [$series]);
         $legend = new Legend(Legend::POSITION_BOTTOM, null, false);
         
-        $title = new Title('نمودار درصد پاسخگویی');
+        $title = new Title('نمودار خلاصه کیفیت پاسخگویی');
         
         $chart = new Chart(
             'chart1', // name
@@ -147,19 +144,12 @@ class ResponseRateExport implements FromQuery, WithHeadings, WithStyles, WithEve
     {
         $timeInterval = [$this->from_date, $this->to_date];
 
-        /** get vote options that doesn't exist in user's votes */
-        $notAnswered = DB::table('ticket_answers')
-                        ->selectRaw("count(id) as cnt, 'پاسخ داده نشده'")
-                        ->where('technical_id', $this->supportId)
-                        ->whereBetween('ticket_answers.created_at', $timeInterval)
-                        ->WhereNull('description');
-
         return DB::table('ticket_answers')
-                 ->selectRaw("count(id) as cnt, 'پاسخ داده شده'")
-                 ->where('technical_id', $this->supportId)
+                 ->join('users', 'ticket_answers.technical_id', '=', 'users.id')
+                 ->where('technical_id', '!=', 0)
                  ->whereBetween('ticket_answers.created_at', $timeInterval)
-                 ->WhereNotNull('description')
-                 ->orderBy('id')
-                 ->union($notAnswered);
+                 ->groupBy('technical_id')
+                 ->selectRaw("technical_id, concat(first_name, ' ', last_name) as full_name, count(*) as cnt, sum(vote_id)/count(vote_id) as performance")
+                 ->orderBy('users.id');
     }
 }

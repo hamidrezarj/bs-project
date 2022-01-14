@@ -5,6 +5,7 @@ use App\Http\Controllers\BaseController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,15 +42,11 @@ Auth::routes([
     'verify' => false,
 ]);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
 Route::middleware('auth')->group(function () {
     Route::get('show', [BaseController::class, 'show'])->name('show');
     Route::post('password/reset', [BaseController::class, 'resetPassword'])->name('password.reset');
     Route::post('profile/update', [BaseController::class, 'updateProfile'])->name('profile.update');
 });
-
-Route::get('reload-captcha', [UserController::class, 'reloadCaptcha']);
 
 Route::get('info', function () {
     return Auth::user();
@@ -60,7 +57,7 @@ Route::get('csrf', function () {
 });
 
 Route::get('login-dev', function () {
-    Auth::loginUsingId(3);
+    Auth::loginUsingId(5);
     return Auth::user();
 });
 
@@ -68,15 +65,28 @@ Route::get('temp', function () {
     dd(getActiveSupports());
 });
 
-Route::get('clear_cache', function () {
-    Illuminate\Support\Facades\Cache::forget('user-is-online-'. 3);
+Route::get('clear_cache', function(){
+    Illuminate\Support\Facades\Cache::flush();
 });
 
-Route::get('use', function () {
-    // $user = App\Models\User::find(1);
-    // $user->national_code = '1234567890';
-    // $user->password = '12345678';
-    // $user->save();
-    $ticket = App\Models\Ticket::find(6);
-    dd($ticket->ticket_answer->technical_support);
+Route::get('import', function(){
+    $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+    // dd(storage_path());
+    $filePath = storage_path(). '/Courses4001.xlsx';
+
+    $spreadsheet = $reader->load($filePath);
+    $sheetData = $spreadsheet->getActiveSheet()->toArray();
+    for ($i = 1; $i < count($sheetData); $i++) { 
+        $row = $sheetData[$i];
+        Illuminate\Support\Facades\DB::table('courses')->insert([
+            'code' => $row[0],
+            'name' => $row[1]
+        ]);
+
+    }
+    return 'pk';
+});
+
+Route::get('test', function(){
+    return App\Models\Course::count();
 });

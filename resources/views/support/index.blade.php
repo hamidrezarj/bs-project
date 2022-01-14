@@ -18,10 +18,7 @@
                     <button id="edit_profile" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="ویرایش پروفایل" class="btn btn-sm btn-default"><i class="fa fa-edit"></i></button>
                     <button id="reset_pass" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="تغییر رمز عبور" class="btn btn-sm btn-default"><i class="fas fa-key"></i></button>
                     <a onclick="event.preventDefault();document.getElementById('logout-form').submit();" href="{{ route('logout') }}"><button type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="خروج" class="btn btn-sm btn-default"><i class="fas fa-sign-out-alt"></i></button></a>
-                    <div class="form-check form-switch ms-2">
-                        <input class="form-check-input" type="checkbox" id="activation" checked>
-                        <label class="form-check-label" for="activation" style="color:#c78902f6;">شما فعال هستید</label>
-                    </div>
+                    <div class="form-check form-switch ms-2"></div>
                 </div>
         </div>
     </div>
@@ -48,7 +45,7 @@
             </thead>
         </table>
     </div>
-    <div class="modal fade" id="description_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="description_modal" tabindex="-1" aria-labelledby="descModal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
             <div class="modal-header">
@@ -78,13 +75,13 @@
                         <div class="col text-nowrap">نام کاربر: <span class="user-name fw-bolder ticket-data"></span></div>
                     </div>
                     <fieldset class="py-3 px-4 pm-3 mt-4">
-                        <legend class="fw-bolder" style="font-size: 18px">شرح درخواست:</legend>
+                        <legend class="fw-bolder" style="font-size: 18px">شرح درخواست</legend>
                         <p class="description ticket-data px-3"></p>
                     </fieldset>
                     <form class="needs-validation" id="ticket_answer_form" novalidate>
                         <div class="form-group mt-3 mx-3">
-                            <label for="answer">پاسخ به درخواست</label>
-                            <textarea class="form-control" id="answer" rows="4"></textarea>
+                            <label for="answer">پاسخ</label>
+                            <textarea class="form-control textarea-cleaner" id="answer" rows="4" required></textarea>
                         </div>
                     </form>
                 </div>

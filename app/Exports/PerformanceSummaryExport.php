@@ -25,7 +25,7 @@ use Maatwebsite\Excel\Events\BeforeSheet;
 use Illuminate\Support\Facades\DB;
 use App\Models\TicketAnswer;
 
-class PerformanceSummaryExport implements FromQuery, WithHeadings, WithStyles, WithEvents, ShouldAutoSize, WithCharts, WithColumnFormatting
+class PerformanceSummaryExport implements FromQuery, WithHeadings, WithStyles, WithEvents, ShouldAutoSize, WithCharts
 {
     public function __construct(int $supportId, $from_date, $to_date, $full_name, $performance)
     {
@@ -34,7 +34,6 @@ class PerformanceSummaryExport implements FromQuery, WithHeadings, WithStyles, W
         $this->to_date = $to_date;
         $this->full_name = $full_name;
         $this->performance = $performance;
-        $this->date = $from_date ."_". $to_date;
     }
 
     public function registerEvents(): array
@@ -50,7 +49,15 @@ class PerformanceSummaryExport implements FromQuery, WithHeadings, WithStyles, W
 
                 $event->sheet->setCellValue('E2', $this->supportId);
                 $event->sheet->setCellValue('F2', $this->full_name);
-                $event->sheet->setCellValue('G2', $this->date);
+                
+                $fromDate = verta($this->from_date)->format('H:i Y/m/d');
+                $toDate = verta($this->to_date)->format('H:i Y/m/d');
+                $date = 'از تاریخ '. $fromDate. ' تا '. $toDate;
+                $event->sheet->setCellValue('G2', $date);
+
+                $now = verta()->format('Y/m/d');
+                $event->sheet->setCellValue('H2', $now);
+                
                 $event->sheet->setCellValue('D2', $this->performance);
             },
         ];
@@ -73,6 +80,7 @@ class PerformanceSummaryExport implements FromQuery, WithHeadings, WithStyles, W
             'کد پشتیبان',
             'نام و نام خانوادگی',
             'بازه زمانی گزارش',
+            'تاریخ'
         ];
     }
 
@@ -90,12 +98,12 @@ class PerformanceSummaryExport implements FromQuery, WithHeadings, WithStyles, W
     //     ];
     // }
 
-    public function columnFormats(): array
-    {
-        return [
-            'G' => NumberFormat::FORMAT_DATE_DDMMYYYY,
-        ];
-    }
+    // public function columnFormats(): array
+    // {
+    //     return [
+    //         'G' => NumberFormat::FORMAT_DATE_DDMMYYYY,
+    //     ];
+    // }
 
     public function charts()
     {

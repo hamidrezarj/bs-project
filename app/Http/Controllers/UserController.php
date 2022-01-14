@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Gate;
 use App\Models\TicketAnswer;
 use App\Models\Ticket;
 use App\Models\User;
+use App\Models\Course;
+
 use Carbon\Carbon;
 
 class UserController extends Controller
@@ -26,16 +28,31 @@ class UserController extends Controller
     public function createTicket(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'course_name' => 'required|string',
-            'course_id'   => 'required|digits:9',
+            // 'course_name' => 'required|string',
+            'course_id'   => 'required|regex:/^[0-9]{7}_[0-9]{2}/',
             'description' => 'required',
-
         ], [], [
-            'course_name' => 'نام درس',
+            // 'course_name' => 'نام درس',
             'course_id' => 'کد درس'
         ])->validate();
 
-        $ticket = auth()->user()->tickets()->create($request->all());
+        $course = Course::where('code', $request->course_id)->first();
+        if(is_null($course)){
+            return response()->json([
+                'errors' => [
+                    'course_id' => [
+                        0 => 'کد درس وارد شده نامعتبر است.'
+                    ]
+                ]
+            ], 422);
+        }
+
+        $ticket = auth()->user()->tickets()->create([
+            'course_id' => $course->code,
+            'course_name' => $course->name,
+            'description' => $request->description
+        ]);
+
         $ticket->status = 'open';
         $ticket->status_id = 1;
         $ticket->expire_date = Carbon::now()->addMinutes(5);

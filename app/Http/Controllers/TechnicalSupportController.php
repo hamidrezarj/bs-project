@@ -16,17 +16,8 @@ class TechnicalSupportController extends Controller
 {
     public function index()
     {
-        $support = Auth::user();
-        $assigned_tickets = DB::table('tickets')
-                              ->join('ticket_answers', 'tickets.id', '=', 'ticket_answers.ticket_id')
-                              ->select('tickets.*')
-                              ->where('ticket_answers.technical_id', $support->id)->where('status', 'open')
-                              ->paginate(5);
 
-        return view('support.index', [
-            'support' => $support,
-            'tickets' => $assigned_tickets
-        ]);
+        return view('support.index');
     }
 
     public function showTickets(Request $request)
