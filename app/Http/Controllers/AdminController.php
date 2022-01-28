@@ -35,8 +35,8 @@ class AdminController extends Controller
     public function createSupport(Request $request)
     {
         Validator::make($request->all(), [
-            'first_name'    => ['required', 'alpha', 'max:255'],
-            'last_name'     => ['required', 'alpha', 'max:255'],
+            'first_name'    => ['required', 'max:255'],
+            'last_name'     => ['required', 'max:255'],
             'email'         => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'national_code' => ['required', 'digits:10', 'unique:users'],
             'student_id'    => ['nullable', 'digits_between:7,8', 'unique:users'],
@@ -69,8 +69,8 @@ class AdminController extends Controller
         }
 
         Validator::make($request->all(), [
-            'first_name'    => ['required', 'alpha', 'max:255'],
-            'last_name'     => ['required', 'alpha', 'max:255'],
+            'first_name'    => ['required', 'max:255'],
+            'last_name'     => ['required', 'max:255'],
             'email'         => ['required', 'string', 'email', 'max:255',
                                 Rule::unique('users')->ignore($support),
                                ],
@@ -81,6 +81,7 @@ class AdminController extends Controller
                                 Rule::unique('users')->ignore($support),
                                ],
             'faculty'         => ['required'],
+            'password'      => ['string', 'min:8', 'confirmed'],
         ], [], [
             'national_code' => 'کد ملی',
             'phone_number' => 'شماره تلفن',
@@ -196,12 +197,12 @@ class AdminController extends Controller
                                 ->selectRaw('vote_id, count(*) as count')
                                 ->get();
         
-        $votes = [];
+        $votes = array_fill(0, 6, 0);
         foreach ($votesCnt as $key => $vote) {
             $votes[$key] = $vote->count;
         }
 
-        $fileName = ' گزارش درصد پاسخگویی پشتیبانان '. '.xlsx';
+        $fileName = 'گزارش خلاصه عملکرد مرکز '. '.xlsx';
         return Excel::download(new TotalPerformanceExport($from_date, $to_date, $votes), $fileName);
     }
 }

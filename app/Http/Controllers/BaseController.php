@@ -68,8 +68,8 @@ class BaseController extends Controller
         }
 
         Validator::make($request->all(), [
-            'first_name'    => ['required', 'alpha', 'max:255'],
-            'last_name'     => ['required', 'alpha', 'max:255'],
+            'first_name'    => ['required', 'max:255'],
+            'last_name'     => ['required', 'max:255'],
             'email'         => ['required', 'string', 'email', 'max:255',
                                 Rule::unique('users')->ignore($user),
                                ],

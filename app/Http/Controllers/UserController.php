@@ -27,12 +27,10 @@ class UserController extends Controller
     
     public function createTicket(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            // 'course_name' => 'required|string',
+        $validator = Validator::make($request->all(), [    
             'course_id'   => 'required|regex:/^[0-9]{7}_[0-9]{2}/',
             'description' => 'required',
         ], [], [
-            // 'course_name' => 'نام درس',
             'course_id' => 'کد درس'
         ])->validate();
 

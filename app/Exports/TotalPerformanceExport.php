@@ -122,7 +122,7 @@ class TotalPerformanceExport implements FromQuery, WithHeadings, WithStyles, Wit
         $plotArea = new PlotArea(null, [$series]);
         $legend = new Legend(Legend::POSITION_BOTTOM, null, false);
         
-        $title = new Title('نمودار خلاصه کیفیت پاسخگویی');
+        $title = new Title('نمودار خلاصه عملکرد مرکز');
         
         $chart = new Chart(
             'chart1', // name
